@@ -12,6 +12,9 @@ import domain.shared.value.PersonName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Function;
+import java.util.function.IntFunction;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class Customer3Test {
@@ -93,7 +96,7 @@ class Customer3Test {
 
         // When confirmCustomerEmailAddress
         // Then it should throw WrongConfirmationHashException
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should not be confirmed
