@@ -4,6 +4,7 @@ import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
+import domain.shared.exception.WrongConfirmationHashException;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
@@ -91,9 +92,9 @@ class Customer3Test {
         givenARegisteredCustomer();
 
         // When confirmCustomerEmailAddress
-        // Then it should throw ConfirmationHashDoesNotMatchException
+        // Then it should throw WrongConfirmationHashException
         ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(Exception.class, () -> registeredCustomer.confirmEmailAddress(command));
+        assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should not be confirmed
         assertFalse(registeredCustomer.isEmailAddressConfirmed);
@@ -137,9 +138,9 @@ class Customer3Test {
         givenCustomerEmailAddressWasChanged();
 
         // When confirmEmailAddress
-        // Then it should throw ConfirmationHashDoesNotMatchException
+        // Then it should throw WrongConfirmationHashException
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(Exception.class, () -> registeredCustomer.confirmEmailAddress(command));
+        assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should not be confirmed
         assertFalse(registeredCustomer.isEmailAddressConfirmed);
@@ -173,7 +174,7 @@ class Customer3Test {
 
         try {
             registeredCustomer.confirmEmailAddress(command);
-        } catch (Exception e) {
+        } catch (WrongConfirmationHashException e) {
             fail("unexpected error in givenEmailAddressWasConfirmed: " + e.getMessage());
         }
     }

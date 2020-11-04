@@ -4,6 +4,7 @@ import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
+import domain.shared.exception.WrongConfirmationHashException;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
@@ -88,7 +89,7 @@ class Customer4Test {
 
         // When / Then
         ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(Exception.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
     }
 
     @Test
@@ -126,9 +127,9 @@ class Customer4Test {
         givenCustomerEmailAddressWasChanged();
 
         // When confirmEmailAddress
-        // Then it should throw ConfirmationHashDoesNotMatchException
+        // Then it should throw WrongConfirmationHashException
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(Exception.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
     }
 
     @Test
@@ -159,7 +160,7 @@ class Customer4Test {
 
         try {
             registeredCustomer = Customer4.confirmEmailAddress(registeredCustomer, command);
-        } catch (Exception e) {
+        } catch (WrongConfirmationHashException e) {
             fail("unexpected error in givenEmailAddressWasConfirmed: " + e.getMessage());
         }
     }

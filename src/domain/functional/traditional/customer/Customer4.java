@@ -4,19 +4,20 @@ import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
+import domain.shared.exception.WrongConfirmationHashException;
 
 public class Customer4 {
     public static CustomerState register(RegisterCustomer command) {
         return new CustomerState(command.customerID, command.emailAddress, command.confirmationHash, command.name);
     }
 
-    public static CustomerState confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) throws Exception {
+    public static CustomerState confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
         if (current.isConfirmed) {
             return current;
         }
 
         if (!command.confirmationHash.equals(current.confirmationHash)) {
-            throw new Exception("confirmation hash does not match");
+            throw new WrongConfirmationHashException();
         }
 
         return new CustomerState(
