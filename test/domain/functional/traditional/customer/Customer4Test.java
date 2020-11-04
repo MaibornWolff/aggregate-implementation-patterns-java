@@ -44,10 +44,9 @@ class Customer4Test {
         var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         var customer = Customer4.register(command);
 
-        // Then
-        assertNotNull(customer);
-
+        // Then it should succeed
         // and it should expose the expected state
+        assertNotNull(customer);
         assertEquals(command.customerID, customer.id);
         assertEquals(command.name, customer.name);
         assertEquals(command.emailAddress, customer.emailAddress);
@@ -60,7 +59,8 @@ class Customer4Test {
         // Given
         givenARegisteredCustomer();
 
-        // When / Then
+        // When confirmCustomerEmailAddress
+        // Then it should succeed
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
         var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
 
@@ -74,7 +74,8 @@ class Customer4Test {
         givenARegisteredCustomer();
         givenCustomerEmailAddressWasChanged();
 
-        // When / Then
+        // When confirmCustomerEmailAddress
+        // Then it should succeed
         var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
         var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
 
@@ -87,7 +88,8 @@ class Customer4Test {
         // Given
         givenARegisteredCustomer();
 
-        // When / Then
+        // When confirmCustomerEmailAddress
+        // Then it should throw WrongConfirmationHashException
         ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
     }
@@ -109,11 +111,11 @@ class Customer4Test {
         // Given
         givenARegisteredCustomer();
 
-        // When / Then
+        // When changeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         var changedCustomer = Customer4.changeEmailAddress(registeredCustomer, command);
 
-        // and the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
+        // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
         assertEquals(command.emailAddress, changedCustomer.emailAddress);
         assertEquals(command.confirmationHash, changedCustomer.confirmationHash);
         assertFalse(changedCustomer.isConfirmed);
@@ -137,11 +139,11 @@ class Customer4Test {
         // Given
         givenARegisteredCustomer();
 
-        // When
+        // When changeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
         var changedCustomer = Customer4.changeName(registeredCustomer, command);
 
-        // and it should expose the expected state
+        // Then it should expose the expected state
         assertTrue(command.name.equals(changedCustomer.name));
     }
 

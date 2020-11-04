@@ -50,9 +50,8 @@ class Customer3Test {
         var customer = Customer3.register(command);
 
         // Then it should succeed
+        // and should have the expected state
         assertNotNull(customer);
-
-        // and it should have the expected state
         assertTrue(command.customerID.equals(customer.id));
         assertTrue(command.name.equals(customer.name));
         assertTrue(command.emailAddress.equals(customer.emailAddress));
@@ -144,9 +143,6 @@ class Customer3Test {
         // Then it should throw WrongConfirmationHashException
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
-
-        // and the emailAddress should not be confirmed
-        assertFalse(registeredCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -158,7 +154,7 @@ class Customer3Test {
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
         registeredCustomer.changeName(command);
 
-        // and it should have the expected state
+        // Then it should have the expected state
         assertTrue(command.name.equals(registeredCustomer.name));
     }
 
