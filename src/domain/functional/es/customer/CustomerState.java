@@ -42,6 +42,7 @@ public class CustomerState {
             emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
             name = ((CustomerRegistered) event).name;
+            isConfirmed = false;
         } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
             isConfirmed = true;
         } else if (event.getClass() == CustomerEmailAddressChanged.class) {
