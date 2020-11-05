@@ -12,7 +12,7 @@ public class Customer4 {
     }
 
     public static CustomerState confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
-        if (current.isConfirmed) {
+        if (current.isEmailAddressConfirmed) {
             return current;
         }
 
@@ -45,7 +45,7 @@ public class Customer4 {
                 current.emailAddress,
                 current.confirmationHash,
                 command.name,
-                current.isConfirmed
+                current.isEmailAddressConfirmed
         );
     }
 }

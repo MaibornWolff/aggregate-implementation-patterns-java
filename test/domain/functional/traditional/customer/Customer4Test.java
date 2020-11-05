@@ -51,7 +51,7 @@ class Customer4Test {
         assertEquals(command.name, customer.name);
         assertEquals(command.emailAddress, customer.emailAddress);
         assertEquals(command.confirmationHash, customer.confirmationHash);
-        assertFalse(customer.isConfirmed);
+        assertFalse(customer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -65,7 +65,7 @@ class Customer4Test {
         var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
 
         // and the emailAddress of the changed Customer should be confirmed
-        assertTrue(changedCustomer.isConfirmed);
+        assertTrue(changedCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -80,7 +80,7 @@ class Customer4Test {
         var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
 
         // and the emailAddress of the changed Customer should be confirmed
-        assertTrue(changedCustomer.isConfirmed);
+        assertTrue(changedCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -118,7 +118,7 @@ class Customer4Test {
         // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
         assertEquals(command.emailAddress, changedCustomer.emailAddress);
         assertEquals(command.confirmationHash, changedCustomer.confirmationHash);
-        assertFalse(changedCustomer.isConfirmed);
+        assertFalse(changedCustomer.isEmailAddressConfirmed);
     }
 
     @Test

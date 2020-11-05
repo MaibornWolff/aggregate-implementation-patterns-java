@@ -13,7 +13,7 @@ public class CustomerState {
     EmailAddress emailAddress;
     Hash confirmationHash;
     PersonName name;
-    Boolean isConfirmed;
+    Boolean isEmailAddressConfirmed;
 
     private CustomerState() {}
 
@@ -42,13 +42,13 @@ public class CustomerState {
             emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
             name = ((CustomerRegistered) event).name;
-            isConfirmed = false;
+            isEmailAddressConfirmed = false;
         } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
-            isConfirmed = true;
+            isEmailAddressConfirmed = true;
         } else if (event.getClass() == CustomerEmailAddressChanged.class) {
             emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
             confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-            isConfirmed = false;
+            isEmailAddressConfirmed = false;
         } else if (event.getClass() == CustomerNameChanged.class) {
             name = ((CustomerNameChanged) event).name;
         }

@@ -10,14 +10,14 @@ public class CustomerState {
     final EmailAddress emailAddress;
     final Hash confirmationHash;
     final PersonName name;
-    final Boolean isConfirmed;
+    final Boolean isEmailAddressConfirmed;
 
-    public CustomerState(ID id, EmailAddress emailAddress, Hash confirmationHash, PersonName name, Boolean isConfirmed) {
+    public CustomerState(ID id, EmailAddress emailAddress, Hash confirmationHash, PersonName name, Boolean isEmailAddressConfirmed) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.confirmationHash = confirmationHash;
         this.name = name;
-        this.isConfirmed = isConfirmed;
+        this.isEmailAddressConfirmed = isEmailAddressConfirmed;
     }
 
     public CustomerState(ID id, EmailAddress emailAddress, Hash confirmationHash, PersonName name) {

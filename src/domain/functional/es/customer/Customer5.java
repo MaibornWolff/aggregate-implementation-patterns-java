@@ -24,7 +24,7 @@ public class Customer5 {
             return List.of(CustomerEmailAddressConfirmationFailed.build(command.customerID));
         }
 
-        if (current.isConfirmed) {
+        if (current.isEmailAddressConfirmed) {
             return List.of();
         }
 
