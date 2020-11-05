@@ -27,6 +27,7 @@ class Customer6Test {
     private Hash changedConfirmationHash;
     private PersonName name;
     private PersonName changedName;
+    private List<Event> events;
 
     @BeforeEach
     public void beforeEach() {
@@ -38,6 +39,7 @@ class Customer6Test {
         changedConfirmationHash = Hash.generate();
         name = PersonName.build("John", "Doe");
         changedName = PersonName.build("Jayne", "Doe");
+        events = new ArrayList<>();
     }
 
     @Test
@@ -58,8 +60,8 @@ class Customer6Test {
 
     @Test
     public void changeCustomerEmailAddress_withUnchangedEmailAddress() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(CustomerRegistered.build(customerID, emailAddress, confirmationHash, name));
+        // Given
+        givenARegisteredCustomer();
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
@@ -71,12 +73,9 @@ class Customer6Test {
 
     @Test
     public void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressChanged
-        var events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
-        );
+        // Given
+        givenARegisteredCustomer();
+        givenCustomerEmailAddressWasChanged();
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
@@ -88,14 +87,10 @@ class Customer6Test {
 
     @Test
     public void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressConfirmed
-        //   and CustomerEmailAddressChanged
-        var events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                CustomerEmailAddressConfirmed.build(customerID),
-                CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
-        );
+        // Given
+        givenARegisteredCustomer();
+        givenEmailAddressWasConfirmed();
+        givenCustomerEmailAddressWasChanged();
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
@@ -111,7 +106,6 @@ class Customer6Test {
         assertTrue(event.customerID.equals(command.customerID));
 
         // When the same command is handled again, Then no event should be recorded
-        events = new ArrayList<Event>(events);
         events.add(event);
         recordedEvents = Customer6.confirmEmailAddress(events, command);
         assertEquals(0, recordedEvents.size());
@@ -119,10 +113,8 @@ class Customer6Test {
 
     @Test
     public void confirmEmailAddress() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-        );
+        // Given
+        givenARegisteredCustomer();
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
@@ -138,7 +130,6 @@ class Customer6Test {
         assertTrue(event.customerID.equals(command.customerID));
 
         // When the same command is handled again, Then no event should be recorded
-        events = new ArrayList<Event>(events);
         events.add(event);
         recordedEvents = Customer6.confirmEmailAddress(events, command);
         assertEquals(0, recordedEvents.size());
@@ -146,10 +137,8 @@ class Customer6Test {
 
     @Test
     public void confirmEmailAddress_withWrongConfirmationHash() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-        );
+        // Given
+        givenARegisteredCustomer();
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
@@ -167,12 +156,9 @@ class Customer6Test {
 
     @Test
     public void confirmEmailAddress_whenItWasAlreadyConfirmed() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressConfirmed
-        var events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                CustomerEmailAddressConfirmed.build(customerID)
-        );
+        // Given
+        givenARegisteredCustomer();
+        givenEmailAddressWasConfirmed();
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
@@ -184,12 +170,9 @@ class Customer6Test {
 
     @Test
     public void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressConfirmed
-        var events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                CustomerEmailAddressConfirmed.build(customerID)
-        );
+        // Given
+        givenARegisteredCustomer();
+        givenEmailAddressWasConfirmed();
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
@@ -207,10 +190,8 @@ class Customer6Test {
 
     @Test
     public void changeCustomerEmailAddress() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-        );
+        // Given
+        givenARegisteredCustomer();
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
@@ -228,7 +209,6 @@ class Customer6Test {
         assertTrue(event.confirmationHash.equals(command.confirmationHash));
 
         // When the same command is handled again, Then no event should be recorded
-        events = new ArrayList<Event>(events);
         events.add(event);
         recordedEvents = Customer6.changeEmailAddress(events, command);
         assertEquals(0, recordedEvents.size());
@@ -236,10 +216,8 @@ class Customer6Test {
 
     @Test
     public void changeCustomerName() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-        );
+        // Given
+        givenARegisteredCustomer();
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
@@ -256,7 +234,6 @@ class Customer6Test {
         assertTrue(event.name.equals(command.name));
 
         // When the same command is handled again, Then no event should be recorded
-        events = new ArrayList<Event>(events);
         events.add(event);
         recordedEvents = Customer6.changeName(events, command);
         assertEquals(0, recordedEvents.size());
@@ -264,10 +241,8 @@ class Customer6Test {
 
     @Test
     public void changeCustomerName_withUnchangedName() {
-        // Given CustomerRegistered
-        List<Event> events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-        );
+        // Given
+        givenARegisteredCustomer();
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
@@ -279,12 +254,9 @@ class Customer6Test {
 
     @Test
     public void changeCustomerName_whenItWasAlreadyChanged() {
-        // Given CustomerRegistered
-        //   and CustomerNameChanged
-        var events = List.of(
-                CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                CustomerNameChanged.build(customerID, changedName)
-        );
+        // Given
+        givenARegisteredCustomer();
+        givenCustomerNameWasChanged();
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
@@ -292,5 +264,24 @@ class Customer6Test {
 
         // Then no event
         assertEquals(0, recordedEvents.size());
+    }
+
+    /**
+     * Helper methods to set up the Given state
+     */
+    private void givenARegisteredCustomer() {
+        events.add(CustomerRegistered.build(customerID, emailAddress, confirmationHash, name));
+    }
+
+    private void givenEmailAddressWasConfirmed() {
+        events.add(CustomerEmailAddressConfirmed.build(customerID));
+    }
+
+    private void givenCustomerEmailAddressWasChanged() {
+        events.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
+    }
+
+    private void givenCustomerNameWasChanged() {
+        events.add(CustomerNameChanged.build(customerID, changedName));
     }
 }
