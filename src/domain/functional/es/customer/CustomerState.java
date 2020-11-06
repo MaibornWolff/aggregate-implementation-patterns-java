@@ -13,7 +13,7 @@ public class CustomerState {
     EmailAddress emailAddress;
     Hash confirmationHash;
     PersonName name;
-    Boolean isEmailAddressConfirmed;
+    boolean isEmailAddressConfirmed;
 
     private CustomerState() {}
 
