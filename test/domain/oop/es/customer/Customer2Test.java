@@ -28,7 +28,7 @@ class Customer2Test {
     private PersonName changedName;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         customerID = ID.generate();
         emailAddress = EmailAddress.build("john@doe.com");
         changedEmailAddress = EmailAddress.build("john+changed@doe.com");
@@ -40,7 +40,7 @@ class Customer2Test {
     }
 
     @Test
-    public void registerCustomer() {
+    void registerCustomer() {
         // When RegisterCustomer
         RegisterCustomer registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         CustomerRegistered customerRegistered = Customer2.register(registerCustomer);
@@ -56,7 +56,7 @@ class Customer2Test {
     }
 
     @Test
-    public void confirmEmailAddress() {
+    void confirmEmailAddress() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -82,7 +82,7 @@ class Customer2Test {
     }
 
     @Test
-    public void confirmEmailAddress_withWrongConfirmationHash() {
+    void confirmEmailAddress_withWrongConfirmationHash() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -105,7 +105,7 @@ class Customer2Test {
     }
 
     @Test
-    public void confirmEmailAddress_whenItWasAlreadyConfirmed() {
+    void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
         Customer2 customer = Customer2.reconstitute(
@@ -124,7 +124,7 @@ class Customer2Test {
     }
 
     @Test
-    public void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
+    void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
         Customer2 customer = Customer2.reconstitute(
@@ -149,7 +149,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerEmailAddress() {
+    void changeCustomerEmailAddress() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -177,7 +177,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -194,7 +194,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressChanged
         Customer2 customer = Customer2.reconstitute(
@@ -213,7 +213,7 @@ class Customer2Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
         //   and CustomerEmailAddressChanged
@@ -243,7 +243,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerName() {
+    void changeCustomerName() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -270,7 +270,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerName_withUnchangedName() {
+    void changeCustomerName_withUnchangedName() {
         // Given CustomerRegistered
         Customer2 customer = Customer2.reconstitute(
                 List.of(
@@ -287,7 +287,7 @@ class Customer2Test {
     }
 
     @Test
-    public void changeCustomerName_whenItWasAlreadyChanged() {
+    void changeCustomerName_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerNameChanged
         Customer2 customer = Customer2.reconstitute(

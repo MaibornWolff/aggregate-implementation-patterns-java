@@ -29,7 +29,7 @@ class Customer4Test {
     private PersonName changedName;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         emailAddress = EmailAddress.build("john@doe.com");
         changedEmailAddress = EmailAddress.build("john+changed@doe.com");
         wrongConfirmationHash = Hash.generate();
@@ -39,7 +39,7 @@ class Customer4Test {
     }
 
     @Test
-    public void registerCustomer() {
+    void registerCustomer() {
         // When
         var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         var customer = Customer4.register(command);
@@ -55,7 +55,7 @@ class Customer4Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress() {
+    void confirmCustomerEmailAddress() {
         // Given
         givenARegisteredCustomer();
 
@@ -69,7 +69,7 @@ class Customer4Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress_whenEmailAddressWasChanged() {
+    void confirmCustomerEmailAddress_whenEmailAddressWasChanged() {
         // Given
         givenARegisteredCustomer();
         givenCustomerEmailAddressWasChanged();
@@ -84,7 +84,7 @@ class Customer4Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress_withWrongConfirmationHash() {
+    void confirmCustomerEmailAddress_withWrongConfirmationHash() {
         // Given
         givenARegisteredCustomer();
 
@@ -95,7 +95,7 @@ class Customer4Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
+    void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
@@ -107,7 +107,7 @@ class Customer4Test {
     }
 
     @Test
-    public void changeCustomerEmailAddress() {
+    void changeCustomerEmailAddress() {
         // Given
         givenARegisteredCustomer();
 
@@ -122,7 +122,7 @@ class Customer4Test {
     }
 
     @Test
-    public void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
@@ -135,7 +135,7 @@ class Customer4Test {
     }
 
     @Test
-    public void changeCustomerName() {
+    void changeCustomerName() {
         // Given
         givenARegisteredCustomer();
 
