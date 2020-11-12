@@ -41,8 +41,6 @@ class Customer3Test {
         changedName = PersonName.build("Jayne", "Doe");
     }
 
-    // TODO: streamline the "then" comments
-
     @Test
     void registerCustomer() {
         // When registerCustomer
