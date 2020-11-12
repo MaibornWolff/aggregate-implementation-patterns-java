@@ -57,75 +57,6 @@ class Customer5Test {
     }
 
     @Test
-    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
-        // Given CustomerRegistered
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-                )
-        );
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        var recordedEvents = Customer5.changeEmailAddress(currentState, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressChanged
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                        CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
-                )
-        );
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer5.changeEmailAddress(currentState, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        // Given CustomerRegistered
-        //   and CustomerEmailAddressConfirmed
-        //   and CustomerEmailAddressChanged
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                        CustomerEmailAddressConfirmed.build(customerID),
-                        CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
-                )
-        );
-
-        // When ConfirmCustomerEmailAddress
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var recordedEvents = Customer5.confirmEmailAddress(currentState, command);
-
-        // Then CustomerEmailAddressConfirmed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
-
-        //  and the payload should be as expected
-        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        currentState.forward(recordedEvents);
-        recordedEvents = Customer5.confirmEmailAddress(currentState, command);
-        assertEquals(0, recordedEvents.size());
-    }
-
-
-    @Test
     void confirmEmailAddress() {
         // Given CustomerRegistered
         var currentState= CustomerState.reconstitute(
@@ -247,6 +178,74 @@ class Customer5Test {
         // When the same command is handled again, Then no event should be recorded
         currentState.forward(recordedEvents);
         recordedEvents = Customer5.changeEmailAddress(currentState, command);
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+        // Given CustomerRegistered
+        var currentState = CustomerState.reconstitute(
+                List.of(
+                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
+                )
+        );
+
+        // When ChangeCustomerEmailAddress
+        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
+        var recordedEvents = Customer5.changeEmailAddress(currentState, command);
+
+        // Then no event
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+        // Given CustomerRegistered
+        //   and CustomerEmailAddressChanged
+        var currentState = CustomerState.reconstitute(
+                List.of(
+                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
+                        CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
+                )
+        );
+
+        // When ChangeCustomerEmailAddress
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var recordedEvents = Customer5.changeEmailAddress(currentState, command);
+
+        // Then no event
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+        // Given CustomerRegistered
+        //   and CustomerEmailAddressConfirmed
+        //   and CustomerEmailAddressChanged
+        var currentState = CustomerState.reconstitute(
+                List.of(
+                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
+                        CustomerEmailAddressConfirmed.build(customerID),
+                        CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
+                )
+        );
+
+        // When ConfirmCustomerEmailAddress
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        var recordedEvents = Customer5.confirmEmailAddress(currentState, command);
+
+        // Then CustomerEmailAddressConfirmed
+        assertEquals(1, recordedEvents.size());
+        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0).getClass());
+
+        //  and the payload should be as expected
+        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+        assertTrue(event.customerID.equals(command.customerID));
+
+        // When the same command is handled again, Then no event should be recorded
+        currentState.forward(recordedEvents);
+        recordedEvents = Customer5.confirmEmailAddress(currentState, command);
         assertEquals(0, recordedEvents.size());
     }
 

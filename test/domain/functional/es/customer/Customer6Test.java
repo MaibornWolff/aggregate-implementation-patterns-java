@@ -58,59 +58,6 @@ class Customer6Test {
     }
 
     @Test
-    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
-        // Given
-        givenARegisteredCustomer();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        var recordedEvents = Customer6.changeEmailAddress(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenCustomerEmailAddressWasChanged();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer6.changeEmailAddress(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasConfirmed();
-        givenCustomerEmailAddressWasChanged();
-
-        // When ConfirmCustomerEmailAddress
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var recordedEvents = Customer6.confirmEmailAddress(eventStream, command);
-
-        // Then CustomerEmailAddressConfirmed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
-
-        //  and the payload should be as expected
-        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        eventStream.add(event);
-        recordedEvents = Customer6.confirmEmailAddress(eventStream, command);
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
     void confirmEmailAddress() {
         // Given
         givenARegisteredCustomer();
@@ -210,6 +157,59 @@ class Customer6Test {
         // When the same command is handled again, Then no event should be recorded
         eventStream.add(event);
         recordedEvents = Customer6.changeEmailAddress(eventStream, command);
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+        // Given
+        givenARegisteredCustomer();
+
+        // When ChangeCustomerEmailAddress
+        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
+        var recordedEvents = Customer6.changeEmailAddress(eventStream, command);
+
+        // Then no event
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+        // Given
+        givenARegisteredCustomer();
+        givenCustomerEmailAddressWasChanged();
+
+        // When ChangeCustomerEmailAddress
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var recordedEvents = Customer6.changeEmailAddress(eventStream, command);
+
+        // Then no event
+        assertEquals(0, recordedEvents.size());
+    }
+
+    @Test
+    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+        // Given
+        givenARegisteredCustomer();
+        givenEmailAddressWasConfirmed();
+        givenCustomerEmailAddressWasChanged();
+
+        // When ConfirmCustomerEmailAddress
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        var recordedEvents = Customer6.confirmEmailAddress(eventStream, command);
+
+        // Then CustomerEmailAddressConfirmed
+        assertEquals(1, recordedEvents.size());
+        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0).getClass());
+
+        //  and the payload should be as expected
+        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+        assertTrue(event.customerID.equals(command.customerID));
+
+        // When the same command is handled again, Then no event should be recorded
+        eventStream.add(event);
+        recordedEvents = Customer6.confirmEmailAddress(eventStream, command);
         assertEquals(0, recordedEvents.size());
     }
 
