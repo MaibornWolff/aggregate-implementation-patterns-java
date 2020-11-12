@@ -9,7 +9,6 @@ import domain.shared.value.PersonName;
 import java.util.List;
 
 public class CustomerState {
-    ID id;
     EmailAddress emailAddress;
     Hash confirmationHash;
     PersonName name;
