@@ -1,4 +1,4 @@
-package domain.oop.es.customer;
+package domain.functional.es.customer;
 
 import domain.functional.es.customer.Customer7;
 import domain.shared.command.ChangeCustomerEmailAddress;
