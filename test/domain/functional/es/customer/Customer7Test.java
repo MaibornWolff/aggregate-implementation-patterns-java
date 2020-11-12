@@ -1,6 +1,5 @@
 package domain.functional.es.customer;
 
-import domain.functional.es.customer.Customer7;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
@@ -28,7 +27,7 @@ class Customer7Test {
     private Hash changedConfirmationHash;
     private PersonName name;
     private PersonName changedName;
-    private List<Event> events;
+    private List<Event> eventStream;
 
     @BeforeEach
     void beforeEach() {
@@ -40,7 +39,7 @@ class Customer7Test {
         changedConfirmationHash = Hash.generate();
         name = PersonName.build("John", "Doe");
         changedName = PersonName.build("Jayne", "Doe");
-        events = new ArrayList<>();
+        eventStream = new ArrayList<>();
     }
 
     @Test
@@ -66,7 +65,7 @@ class Customer7Test {
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(events, command);
+        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -80,7 +79,7 @@ class Customer7Test {
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(events, command);
+        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -95,7 +94,7 @@ class Customer7Test {
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(events, command);
+        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
 
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
@@ -107,8 +106,8 @@ class Customer7Test {
         assertTrue(event.customerID.equals(command.customerID));
 
         // When the same command is handled again, Then no event should be recorded
-        events.add(event);
-        recordedEvents = Customer7.confirmEmailAddress(events, command);
+        eventStream.add(event);
+        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
         assertEquals(0, recordedEvents.size());
     }
 
@@ -119,7 +118,7 @@ class Customer7Test {
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(events, command);
+        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
 
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
@@ -131,8 +130,8 @@ class Customer7Test {
         assertTrue(event.customerID.equals(command.customerID));
 
         // When the same command is handled again, Then no event should be recorded
-        events.add(event);
-        recordedEvents = Customer7.confirmEmailAddress(events, command);
+        eventStream.add(event);
+        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
         assertEquals(0, recordedEvents.size());
     }
 
@@ -143,7 +142,7 @@ class Customer7Test {
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(events, command);
+        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
 
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
@@ -163,7 +162,7 @@ class Customer7Test {
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(events, command);
+        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -177,7 +176,7 @@ class Customer7Test {
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(events, command);
+        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
 
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
@@ -196,7 +195,7 @@ class Customer7Test {
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(events, command);
+        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
 
         // Then CustomerEmailAddressChanged
         assertEquals(1, recordedEvents.size());
@@ -210,8 +209,8 @@ class Customer7Test {
         assertTrue(event.confirmationHash.equals(command.confirmationHash));
 
         // When the same command is handled again, Then no event should be recorded
-        events.add(event);
-        recordedEvents = Customer7.changeEmailAddress(events, command);
+        eventStream.add(event);
+        recordedEvents = Customer7.changeEmailAddress(eventStream, command);
         assertEquals(0, recordedEvents.size());
     }
 
@@ -222,7 +221,7 @@ class Customer7Test {
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer7.changeName(events, command);
+        var recordedEvents = Customer7.changeName(eventStream, command);
 
         // Then CustomerNameChanged
         assertEquals(1, recordedEvents.size());
@@ -235,8 +234,8 @@ class Customer7Test {
         assertTrue(event.name.equals(command.name));
 
         // When the same command is handled again, Then no event should be recorded
-        events.add(event);
-        recordedEvents = Customer7.changeName(events, command);
+        eventStream.add(event);
+        recordedEvents = Customer7.changeName(eventStream, command);
         assertEquals(0, recordedEvents.size());
     }
 
@@ -247,7 +246,7 @@ class Customer7Test {
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        var recordedEvents = Customer7.changeName(events, command);
+        var recordedEvents = Customer7.changeName(eventStream, command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -261,7 +260,7 @@ class Customer7Test {
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer7.changeName(events, command);
+        var recordedEvents = Customer7.changeName(eventStream, command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -271,18 +270,18 @@ class Customer7Test {
      * Helper methods to set up the Given state
      */
     private void givenARegisteredCustomer() {
-        events.add(CustomerRegistered.build(customerID, emailAddress, confirmationHash, name));
+        eventStream.add(CustomerRegistered.build(customerID, emailAddress, confirmationHash, name));
     }
 
     private void givenEmailAddressWasConfirmed() {
-        events.add(CustomerEmailAddressConfirmed.build(customerID));
+        eventStream.add(CustomerEmailAddressConfirmed.build(customerID));
     }
 
     private void givenCustomerEmailAddressWasChanged() {
-        events.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
+        eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
     }
 
     private void givenCustomerNameWasChanged() {
-        events.add(CustomerNameChanged.build(customerID, changedName));
+        eventStream.add(CustomerNameChanged.build(customerID, changedName));
     }
 }

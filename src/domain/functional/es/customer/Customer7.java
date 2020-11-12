@@ -22,10 +22,10 @@ public class Customer7 {
         );
     }
 
-    public static List<Event> confirmEmailAddress(List<Event> events, ConfirmCustomerEmailAddress command) {
+    public static List<Event> confirmEmailAddress(List<Event> eventStream, ConfirmCustomerEmailAddress command) {
         boolean isEmailAddressConfirmed = false;
         Hash confirmationHash = null;
-        for (Event event: events) {
+        for (Event event: eventStream) {
             if (event instanceof CustomerRegistered) {
                 confirmationHash = ((CustomerRegistered) event).confirmationHash;
             } else if (event instanceof CustomerEmailAddressConfirmed) {
@@ -36,7 +36,8 @@ public class Customer7 {
             }
         }
 
-        if (confirmationHash == null || !confirmationHash.equals(command.confirmationHash)) {
+        assert confirmationHash != null;
+        if (!confirmationHash.equals(command.confirmationHash)) {
             return List.of(CustomerEmailAddressConfirmationFailed.build(command.customerID));
         }
 
@@ -47,9 +48,9 @@ public class Customer7 {
         return List.of(CustomerEmailAddressConfirmed.build(command.customerID));
     }
 
-    public static List<Event> changeEmailAddress(List<Event> events, ChangeCustomerEmailAddress command) {
+    public static List<Event> changeEmailAddress(List<Event> eventStream, ChangeCustomerEmailAddress command) {
         EmailAddress emailAddress = null;
-        for (Event event: events) {
+        for (Event event: eventStream) {
             if (event instanceof CustomerRegistered) {
                 emailAddress = ((CustomerRegistered) event).emailAddress;
             } else if (event instanceof CustomerEmailAddressChanged) {
@@ -57,16 +58,17 @@ public class Customer7 {
             }
         }
 
-        if (emailAddress == null || emailAddress.equals(command.emailAddress)) {
+        assert emailAddress != null;
+        if (emailAddress.equals(command.emailAddress)) {
             return List.of();
         }
 
         return List.of(CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash));
     }
 
-    public static List<Event> changeName(List<Event> events, ChangeCustomerName command) {
+    public static List<Event> changeName(List<Event> eventStream, ChangeCustomerName command) {
         PersonName name = null;
-        for (Event event: events) {
+        for (Event event: eventStream) {
             if (event instanceof CustomerRegistered) {
                 name = ((CustomerRegistered) event).name;
             }
@@ -75,7 +77,8 @@ public class Customer7 {
             }
         }
 
-        if (name == null || name.equals(command.name)) {
+        assert name != null;
+        if (name.equals(command.name)) {
             return List.of();
         }
 

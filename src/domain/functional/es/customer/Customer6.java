@@ -19,8 +19,8 @@ public class Customer6 {
         );
     }
 
-    public static List<Event> confirmEmailAddress(List<Event> events, ConfirmCustomerEmailAddress command) {
-        var current = CustomerState.reconstitute(events);
+    public static List<Event> confirmEmailAddress(List<Event> eventStream, ConfirmCustomerEmailAddress command) {
+        var current = CustomerState.reconstitute(eventStream);
 
         if (!current.confirmationHash.equals(command.confirmationHash)) {
             return List.of(CustomerEmailAddressConfirmationFailed.build(command.customerID));
@@ -33,8 +33,8 @@ public class Customer6 {
         return List.of(CustomerEmailAddressConfirmed.build(command.customerID));
     }
 
-    public static List<Event> changeEmailAddress(List<Event> events, ChangeCustomerEmailAddress command) {
-        var current = CustomerState.reconstitute(events);
+    public static List<Event> changeEmailAddress(List<Event> eventStream, ChangeCustomerEmailAddress command) {
+        var current = CustomerState.reconstitute(eventStream);
 
         if (current.emailAddress.equals(command.emailAddress)) {
             return List.of();
@@ -43,8 +43,8 @@ public class Customer6 {
         return List.of(CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash));
     }
 
-    public static List<Event> changeName(List<Event> events, ChangeCustomerName command) {
-        var current = CustomerState.reconstitute(events);
+    public static List<Event> changeName(List<Event> eventStream, ChangeCustomerName command) {
+        var current = CustomerState.reconstitute(eventStream);
 
         if (current.name.equals(command.name)) {
             return List.of();
