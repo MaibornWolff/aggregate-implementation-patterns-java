@@ -12,17 +12,6 @@ import domain.shared.value.PersonName;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This version of a Customer Aggregate is OOP-style, event-sourced, and records events that have happened, the client has to request those recorded events.
- * <p>
- * Enable the disabled test cases (remove the @Disabled annotation) in Customer2Test one by one and make them all green!
- * The first test case (RegisterCustomer) is already enabled for you to start.
- * <p>
- * Bonus challenge:
- * What needs to be changed so that the Aggregate keeps it's own state up-to-date, e.g. to be able to handle multiple
- * Commands within one request from the outside?
- * Hint: To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
- */
 public final class Customer1 {
     private EmailAddress emailAddress;
     private Hash confirmationHash;
