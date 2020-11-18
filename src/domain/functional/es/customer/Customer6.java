@@ -9,7 +9,6 @@ import domain.shared.event.*;
 import java.util.List;
 
 public class Customer6 {
-
     public static CustomerRegistered register(RegisterCustomer command) {
         return CustomerRegistered.build(
                 command.customerID,
@@ -52,5 +51,4 @@ public class Customer6 {
 
         return List.of(CustomerNameChanged.build(command.customerID, command.name));
     }
-
 }

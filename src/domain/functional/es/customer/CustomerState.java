@@ -3,7 +3,6 @@ package domain.functional.es.customer;
 import domain.shared.event.*;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
-import domain.shared.value.ID;
 import domain.shared.value.PersonName;
 
 import java.util.List;

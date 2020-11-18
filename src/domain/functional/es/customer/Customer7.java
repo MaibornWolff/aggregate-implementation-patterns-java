@@ -12,7 +12,6 @@ import domain.shared.value.PersonName;
 import java.util.List;
 
 public class Customer7 {
-
     public static CustomerRegistered register(RegisterCustomer command) {
         return CustomerRegistered.build(
                 command.customerID,
@@ -84,5 +83,4 @@ public class Customer7 {
 
         return List.of(CustomerNameChanged.build(command.customerID, command.name));
     }
-
 }

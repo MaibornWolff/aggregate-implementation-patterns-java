@@ -114,4 +114,3 @@ public final class Customer2 {
         return event;
     }
 }
-

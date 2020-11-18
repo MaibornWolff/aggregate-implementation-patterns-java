@@ -9,7 +9,6 @@ import domain.shared.event.*;
 import java.util.List;
 
 public class Customer5 {
-
     public static CustomerRegistered register(RegisterCustomer command) {
         return CustomerRegistered.build(
                         command.customerID,
