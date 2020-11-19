@@ -54,9 +54,10 @@ To test this, you can extend the test cases so that they handle the same command
 * state and behavior is the same object
 * directly modifies the state
 
-*Challenge:*
-How can we test this? Most behavior methods don't return anything.
-Implement the missing parts in the tests first.
+*Challenge:*  
+How can we test this?  
+Most behavior methods don't return anything.  
+Implement the missing assertions in the tests first.
 
 *Hint* ???
 
@@ -64,11 +65,9 @@ Implement the missing parts in the tests first.
 * state and behavior are different objects
 * directly modifies the state
 
-*Challenge:*
-How can we test this?
-Implement the missing parts in the tests first.
-
-*Hint* ???
+*Challenge:*  
+How can we test this?  
+Implement the missing assertions in the tests first!
 
 ### Customer5 (Functional & Event-Sourced)
 * external state
@@ -79,5 +78,5 @@ Implement the missing parts in the tests first.
 * input: event
 
 ### Customer7 (Functional & Event-Sourced)
-* internal state per function (local variables)
+* internal state per function (variables)
 * input: events
