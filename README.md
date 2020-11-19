@@ -21,17 +21,19 @@ This leads to the following comprehensive representation in four quadrants.
 Currently only shown on the Miro board we use for the introduction.
 
 ## General Instructions
-For each model, you can find a class *CustomerX* containing production code as well as a corresponding test class
-*CustomerXTest*. Most of the time, only production code snippets are missing but sometimes also tests wait for your
+For each model, you can find a class *CustomerX* containing production code as well as a corresponding test class *CustomerXTest*.  
+Most of the time, only production code snippets are missing but sometimes also tests wait for your
 implementation.
 
-Enable the disabled test cases (remove the @Disabled annotation) in *CustomerXTest* one by one and make them all green!
+Enable the disabled test cases (remove the @Disabled annotation) in *CustomerXTest* one by one and make them all green!  
 The first test case (RegisterCustomer) is already enabled for you to start.
 
-## Our variants
+## Exercises - Implement the following variants
 
-### Customer1 (OOP & Event-Sourced)
-* records events that have happened
+### OOP & Event-Sourced
+
+#### Customer1
+* records the events that have happened
 * the client has to request those events
 
 *Bonus challenge:*  
@@ -41,8 +43,7 @@ Commands within one request from the outside?
 *Hint:*   
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
-
-### Customer2 (OOP & Event-Sourced)
+#### Customer2
 * directly returns the events that have happened
 
 *Bonus challenge:*  
@@ -52,8 +53,9 @@ Commands within one request from the outside?
 *Hint:*  
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
+### OOP & Traditional
 
-### Customer3 (OOP & Traditional)
+#### Customer3
 * state and behavior is the same object
 * directly modifies the state
 
@@ -62,8 +64,9 @@ How can we test this?
 Most behavior methods don't return anything.  
 Implement the missing assertions in the tests first.
 
+### Functional & Traditional
 
-### Customer4 (Functional & Traditional)
+#### Customer4
 * state and behavior are different objects
 * directly modifies the state
 
@@ -71,17 +74,18 @@ Implement the missing assertions in the tests first.
 How can we test this?  
 Implement the missing assertions in the tests first!
 
+### Functional & Event-Sourced
 
-### Customer5 (Functional & Event-Sourced)
+#### Customer5
 * uses an external state object (*CustomerState*)
 * this is reconstituted outside and given as input to the behavior functions
 
 
-### Customer6 (Functional & Event-Sourced)
+#### Customer6 (Functional & Event-Sourced)
 * uses an external state object (*CustomerState*)
 * this is reconstituted inside of the behavior functions from the events that are given as input
 
 
-### Customer7 (Functional & Event-Sourced)
+#### Customer7 (Functional & Event-Sourced)
 * internal state per function (variables)
 * those variables get reconstituted inside of the behavior functions from the events that are given as input
