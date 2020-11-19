@@ -17,7 +17,8 @@ This leads to the following comprehensive representation in four quadrants.
 | **FP**  | *FP & ES*  | *FP & TRAD*  |
 
 ## Our Aggregate Example
-**To Do**
+**To Do**  
+Currently only shown on the Miro board we use for the introduction.
 
 ## General Instructions
 For each model, you can find a class *CustomerX* containing production code as well as a corresponding test class
@@ -40,6 +41,7 @@ Commands within one request from the outside?
 *Hint:*   
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
+
 ### Customer2 (OOP & Event-Sourced)
 * directly returns the events that have happened
 
@@ -50,6 +52,7 @@ Commands within one request from the outside?
 *Hint:*  
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
+
 ### Customer3 (OOP & Traditional)
 * state and behavior is the same object
 * directly modifies the state
@@ -59,7 +62,6 @@ How can we test this?
 Most behavior methods don't return anything.  
 Implement the missing assertions in the tests first.
 
-*Hint* ???
 
 ### Customer4 (Functional & Traditional)
 * state and behavior are different objects
@@ -69,14 +71,17 @@ Implement the missing assertions in the tests first.
 How can we test this?  
 Implement the missing assertions in the tests first!
 
+
 ### Customer5 (Functional & Event-Sourced)
-* external state
-* input: state
+* uses an external state object (*CustomerState*)
+* this is reconstituted outside and given as input to the behavior functions
+
 
 ### Customer6 (Functional & Event-Sourced)
-* external state
-* input: event
+* uses an external state object (*CustomerState*)
+* this is reconstituted inside of the behavior functions from the events that are given as input
+
 
 ### Customer7 (Functional & Event-Sourced)
 * internal state per function (variables)
-* input: events
+* those variables get reconstituted inside of the behavior functions from the events that are given as input
