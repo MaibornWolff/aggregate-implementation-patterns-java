@@ -12,9 +12,6 @@ import domain.shared.value.PersonName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Function;
-import java.util.function.IntFunction;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class Customer3Test {
