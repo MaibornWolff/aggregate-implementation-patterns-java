@@ -69,7 +69,7 @@ class Customer6Test {
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
@@ -93,7 +93,7 @@ class Customer6Test {
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
@@ -127,7 +127,7 @@ class Customer6Test {
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
@@ -146,7 +146,7 @@ class Customer6Test {
         // Then CustomerEmailAddressChanged
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         CustomerEmailAddressChanged event = (CustomerEmailAddressChanged) recordedEvents.get(0);
@@ -201,7 +201,7 @@ class Customer6Test {
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
@@ -225,7 +225,7 @@ class Customer6Test {
         // Then CustomerNameChanged
         assertEquals(1, recordedEvents.size());
         assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0).getClass());
+        assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
         var event = (CustomerNameChanged) recordedEvents.get(0);
