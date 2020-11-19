@@ -6,16 +6,15 @@ your next project.
 
 ## Implementation Characteristics
 While this is certainly a very simplified approach, we'll focus on the following two dimensions:
-* event-sourced vs. traditional
+* event-sourced vs. traditional (i.e. full state gets persisted)
 * functional vs. object-oriented
 
-This leads to the following comprehensive representation in four quadrants. In the hands-on part, we'll follow the 
-implied order A -> B -> C -> D.
+This leads to the following comprehensive representation in four quadrants.
 
-|         | ES                 | TRAD                 |
-| ------- | :----------------- | -------------------: |
-| **OOP** | A <br/> *OOP & ES* | B <br/> *OOP & TRAD* |
-| **FP**  | *FP & ES* <br/> D  | *FP & TRAD* <br/> C  |
+|         | ES         | TRAD         |
+| ------- | :--------- | -----------: |
+| **OOP** | *OOP & ES* | *OOP & TRAD* |
+| **FP**  | *FP & ES*  | *FP & TRAD*  |
 
 ## Our Aggregate Example
 **To Do**
@@ -28,10 +27,11 @@ implementation.
 Enable the disabled test cases (remove the @Disabled annotation) in *CustomerXTest* one by one and make them all green!
 The first test case (RegisterCustomer) is already enabled for you to start.
 
-## Our Models
+## Our variants
 
-### Customer1
-This version of a Customer Aggregate is OOP-style, event-sourced, and records events that have happened, the client has to request those recorded events.
+### Customer1 (OOP & Event-Sourced)
+* records events that have happened
+* the client has to request those events
 
 *Bonus challenge:*  
 What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
@@ -40,26 +40,44 @@ Commands within one request from the outside?
 *Hint:*   
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
-### Customer2
-This version of a Customer Aggregate is OOP-style, event-sourced, and directly returns the events that have happened.
+### Customer2 (OOP & Event-Sourced)
+* directly returns the events that have happened
 
 *Bonus challenge:*  
 What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
 Commands within one request from the outside?
+
 *Hint:*  
 To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
 
-### Customer3
-**To Do**
+### Customer3 (OOP & Traditional)
+* state and behavior is the same object
+* directly modifies the state
 
-### Customer4
-**To Do**
+*Challenge:*
+How can we test this? Most behavior methods don't return anything.
+Implement the missing parts in the tests first.
 
-### Customer5
-**To Do**
+*Hint* ???
 
-### Customer6
-**To Do**
+### Customer4 (Functional & Traditional)
+* state and behavior are different objects
+* directly modifies the state
 
-### Customer7
-**To Do**
+*Challenge:*
+How can we test this?
+Implement the missing parts in the tests first.
+
+*Hint* ???
+
+### Customer5 (Functional & Event-Sourced)
+* external state
+* input: state
+
+### Customer6 (Functional & Event-Sourced)
+* external state
+* input: event
+
+### Customer7 (Functional & Event-Sourced)
+* internal state per function (local variables)
+* input: events
