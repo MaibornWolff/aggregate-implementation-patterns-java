@@ -29,10 +29,6 @@ public class Customer3 {
     }
 
     public void confirmEmailAddress(ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
-        if (isEmailAddressConfirmed) {
-            return;
-        }
-
         if (!command.confirmationHash.equals(confirmationHash)) {
             throw new WrongConfirmationHashException();
         }

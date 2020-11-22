@@ -12,10 +12,6 @@ public class Customer4 {
     }
 
     public static CustomerState confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
-        if (current.isEmailAddressConfirmed) {
-            return current;
-        }
-
         if (!command.confirmationHash.equals(current.confirmationHash)) {
             throw new WrongConfirmationHashException();
         }

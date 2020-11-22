@@ -69,21 +69,6 @@ class Customer4Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress_whenEmailAddressWasChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenCustomerEmailAddressWasChanged();
-
-        // When confirmCustomerEmailAddress
-        // Then it should succeed
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
-
-        // and the emailAddress of the changed Customer should be confirmed
-        assertTrue(changedCustomer.isEmailAddressConfirmed);
-    }
-
-    @Test
     void confirmCustomerEmailAddress_withWrongConfirmationHash() {
         // Given
         givenARegisteredCustomer();
@@ -92,18 +77,6 @@ class Customer4Test {
         // Then it should throw WrongConfirmationHashException
         ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
-    }
-
-    @Test
-    void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasConfirmed();
-
-        // When confirmCustomerEmailAddress
-        // Then it should succeed
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
     }
 
     @Test
@@ -122,7 +95,7 @@ class Customer4Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress_withWrongConfirmationHash_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
@@ -130,8 +103,11 @@ class Customer4Test {
 
         // When confirmEmailAddress
         // Then it should throw WrongConfirmationHashException
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
+
+        // and the emailAddress of the changed Customer should be confirmed
+        assertTrue(changedCustomer.isEmailAddressConfirmed);
     }
 
     @Test
