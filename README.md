@@ -46,7 +46,9 @@ To test this, you can extend the test cases so that they handle the same command
 #### Customer2
 * directly returns the events that have happened
 
-*Bonus challenge:*  
+*Bonus challenges:*  
+This signature of the *register()* factory methods is more complicated and not as type-safe as it could be, improve it
+and adapt the test case.  
 What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
 Commands within one request from the outside?
 
