@@ -1,6 +1,5 @@
 package domain.oop.es.customer;
 
-import domain.oop.es.customer.Customer1;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;

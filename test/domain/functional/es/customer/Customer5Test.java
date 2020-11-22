@@ -1,7 +1,5 @@
 package domain.functional.es.customer;
 
-import domain.functional.es.customer.Customer5;
-import domain.functional.es.customer.CustomerState;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
