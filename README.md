@@ -79,15 +79,34 @@ Implement the missing assertions in the tests first!
 ### Functional & Event-Sourced
 
 #### Customer5
-* uses an external state object (*CustomerState*)
+* uses a state object (*CustomerState*)
 * this is reconstituted outside and given as input to the behavior functions
 
+*Bonus challenge:*  
+What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
+Commands within one request from the outside?
 
-#### Customer6 (Functional & Event-Sourced)
-* uses an external state object (*CustomerState*)
+*Hint:*  
+To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
+
+#### Customer6
+* uses a state object (*CustomerState*)
 * this is reconstituted inside of the behavior functions from the events that are given as input
 
+*Bonus challenge:*  
+What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
+Commands within one request from the outside?
 
-#### Customer7 (Functional & Event-Sourced)
+*Hint:*  
+To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
+
+#### Customer7
 * internal state per function (variables)
 * those variables get reconstituted inside of the behavior functions from the events that are given as input
+
+*Bonus challenge:*  
+What needs to be changed so that the Aggregate keeps its own state up-to-date, e.g. to be able to handle multiple
+Commands within one request from the outside?
+
+*Hint:*  
+To test this, you can extend the test cases so that they handle the same command again, resulting in "no changes".
