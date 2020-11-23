@@ -102,7 +102,7 @@ class Customer3Test {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
-        givenCustomerEmailAddressWasChanged();
+        givenEmailAddressWasChanged();
 
         // When confirmCustomerEmailAddress
         // Then it should succeed
@@ -146,7 +146,7 @@ class Customer3Test {
         }
     }
 
-    private void givenCustomerEmailAddressWasChanged() {
+    private void givenEmailAddressWasChanged() {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer.changeEmailAddress(command);

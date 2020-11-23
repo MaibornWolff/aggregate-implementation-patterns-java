@@ -99,7 +99,7 @@ class Customer4Test {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
-        givenCustomerEmailAddressWasChanged();
+        givenEmailAddressWasChanged();
 
         // When confirmEmailAddress
         // Then it should throw WrongConfirmationHashException
@@ -143,7 +143,7 @@ class Customer4Test {
         }
     }
 
-    private void givenCustomerEmailAddressWasChanged() {
+    private void givenEmailAddressWasChanged() {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer = Customer4.changeEmailAddress(registeredCustomer, command);

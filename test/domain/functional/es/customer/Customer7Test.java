@@ -178,7 +178,7 @@ class Customer7Test {
     void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
         // Given
         givenARegisteredCustomer();
-        givenCustomerEmailAddressWasChanged();
+        givenEmailAddressWasChanged();
 
         // When ChangeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
@@ -193,7 +193,7 @@ class Customer7Test {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
-        givenCustomerEmailAddressWasChanged();
+        givenEmailAddressWasChanged();
 
         // When ConfirmCustomerEmailAddress
         var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
@@ -277,7 +277,7 @@ class Customer7Test {
         eventStream.add(CustomerEmailAddressConfirmed.build(customerID));
     }
 
-    private void givenCustomerEmailAddressWasChanged() {
+    private void givenEmailAddressWasChanged() {
         eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
     }
 
