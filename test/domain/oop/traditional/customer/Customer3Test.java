@@ -152,7 +152,7 @@ class Customer3Test {
         registeredCustomer.changeEmailAddress(command);
     }
 
-    private void givenCustomerNameWasChanged() {
+    private void givenNameWasChanged() {
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
         registeredCustomer.changeName(command);
     }

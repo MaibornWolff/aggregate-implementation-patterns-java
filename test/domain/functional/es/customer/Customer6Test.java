@@ -255,7 +255,7 @@ class Customer6Test {
     void changeCustomerName_whenItWasAlreadyChanged() {
         // Given
         givenARegisteredCustomer();
-        givenCustomerNameWasChanged();
+        givenNameWasChanged();
 
         // When ChangeCustomerName
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
@@ -280,7 +280,7 @@ class Customer6Test {
         eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
     }
 
-    private void givenCustomerNameWasChanged() {
+    private void givenNameWasChanged() {
         eventStream.add(CustomerNameChanged.build(customerID, changedName));
     }
 }
