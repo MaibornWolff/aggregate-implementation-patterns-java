@@ -82,13 +82,13 @@ public final class Customer1 {
         recordedEvents.add(event);
     }
 
-    private void apply(List<Event> events) {
+    void apply(List<Event> events) {
         for (Event event : events) {
             apply(event);
         }
     }
 
-    private void apply(Event event) {
+    void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
             emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
