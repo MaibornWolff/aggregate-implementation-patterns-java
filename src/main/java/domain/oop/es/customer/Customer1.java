@@ -75,16 +75,11 @@ public final class Customer1 {
     }
 
     public List<Event> getRecordedEvents() {
-        var current = new ArrayList<>(recordedEvents);
-
-        recordedEvents.clear();
-
-        return current;
+        return recordedEvents;
     }
 
     private void recordThat(Event event) {
         recordedEvents.add(event);
-        apply(event);
     }
 
     private void apply(List<Event> events) {

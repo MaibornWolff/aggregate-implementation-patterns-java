@@ -75,11 +75,6 @@ class Customer7Test {
         //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        eventStream.add(event);
-        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -154,11 +149,6 @@ class Customer7Test {
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.emailAddress.equals(command.emailAddress));
         assertTrue(event.confirmationHash.equals(command.confirmationHash));
-
-        // When the same command is handled again, Then no event should be recorded
-        eventStream.add(event);
-        recordedEvents = Customer7.changeEmailAddress(eventStream, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -207,11 +197,6 @@ class Customer7Test {
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        eventStream.add(event);
-        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -232,11 +217,6 @@ class Customer7Test {
         var event = (CustomerNameChanged) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.name.equals(command.name));
-
-        // When the same command is handled again, Then no event should be recorded
-        eventStream.add(event);
-        recordedEvents = Customer7.changeName(eventStream, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test

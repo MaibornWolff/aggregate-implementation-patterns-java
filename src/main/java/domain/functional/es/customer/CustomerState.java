@@ -23,12 +23,6 @@ public class CustomerState {
         return customer;
     }
 
-    public void forward(List<Event> events) {
-        for (Event event : events) {
-            apply(event);
-        }
-    }
-
     private void apply(List<Event> events) {
         for (Event event : events) {
             apply(event);

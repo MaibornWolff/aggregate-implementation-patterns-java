@@ -40,7 +40,7 @@ public final class Customer2 {
     public List<Event> confirmEmailAddress(ConfirmCustomerEmailAddress command) {
         if (!confirmationHash.equals(command.confirmationHash)) {
             return List.of(
-                    apply(CustomerEmailAddressConfirmationFailed.build(command.customerID))
+                    CustomerEmailAddressConfirmationFailed.build(command.customerID)
             );
         }
 
@@ -49,9 +49,7 @@ public final class Customer2 {
         }
 
         return List.of(
-                apply(
-                        CustomerEmailAddressConfirmed.build(command.customerID)
-                )
+                CustomerEmailAddressConfirmed.build(command.customerID)
         );
     }
 
@@ -61,9 +59,7 @@ public final class Customer2 {
         }
 
         return List.of(
-                apply(
-                        CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
-                )
+                CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
         );
     }
 
@@ -73,9 +69,7 @@ public final class Customer2 {
         }
 
         return List.of(
-                apply(
-                        CustomerNameChanged.build(command.customerID, command.name)
-                )
+                CustomerNameChanged.build(command.customerID, command.name)
         );
     }
 
@@ -85,7 +79,7 @@ public final class Customer2 {
         }
     }
 
-    private Event apply(Event event) {
+    private void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
             emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
@@ -99,7 +93,5 @@ public final class Customer2 {
         } else if (event.getClass() == CustomerNameChanged.class) {
             name = ((CustomerNameChanged) event).name;
         }
-
-        return event;
     }
 }

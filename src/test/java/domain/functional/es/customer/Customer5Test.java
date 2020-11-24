@@ -75,11 +75,6 @@ class Customer5Test {
         //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        currentState.forward(recordedEvents);
-        recordedEvents = Customer5.confirmEmailAddress(currentState, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -172,11 +167,6 @@ class Customer5Test {
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.emailAddress.equals(command.emailAddress));
         assertTrue(event.confirmationHash.equals(command.confirmationHash));
-
-        // When the same command is handled again, Then no event should be recorded
-        currentState.forward(recordedEvents);
-        recordedEvents = Customer5.changeEmailAddress(currentState, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -240,11 +230,6 @@ class Customer5Test {
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When the same command is handled again, Then no event should be recorded
-        currentState.forward(recordedEvents);
-        recordedEvents = Customer5.confirmEmailAddress(currentState, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test
@@ -269,11 +254,6 @@ class Customer5Test {
         var event = (CustomerNameChanged) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.name.equals(command.name));
-
-        // When the same command is handled again, Then no event should be recorded
-        currentState.forward(recordedEvents);
-        recordedEvents = Customer5.changeName(currentState, command);
-        assertEquals(0, recordedEvents.size());
     }
 
     @Test

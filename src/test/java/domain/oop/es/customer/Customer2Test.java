@@ -75,9 +75,6 @@ class Customer2Test {
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When same command is handled again, Then no event should be recorded
-        assertEquals(0, customer.confirmEmailAddress(command).size());
     }
 
     @Test
@@ -170,9 +167,6 @@ class Customer2Test {
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.emailAddress.equals(command.emailAddress));
         assertTrue(event.confirmationHash.equals(command.confirmationHash));
-
-        // When same command is handled again, Then no event should be recorded
-        assertEquals(0, customer.changeEmailAddress(command).size());
     }
 
     @Test
@@ -236,9 +230,6 @@ class Customer2Test {
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
-
-        // When same command is handled again, Then no event should be recorded
-        assertEquals(0, customer.confirmEmailAddress(command).size());
     }
 
     @Test
@@ -263,9 +254,6 @@ class Customer2Test {
         CustomerNameChanged event = (CustomerNameChanged) recordedEvents.get(0);
         assertTrue(event.customerID.equals(command.customerID));
         assertTrue(event.name.equals(command.name));
-
-        // When same command is handled again, Then no event should be recorded
-        assertEquals(0, customer.changeName(command).size());
     }
 
     @Test
