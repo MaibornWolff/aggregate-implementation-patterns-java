@@ -72,7 +72,7 @@ class Customer4Test {
 
         // When confirmCustomerEmailAddress
         // Then it should throw WrongConfirmationHashException
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
     }
 

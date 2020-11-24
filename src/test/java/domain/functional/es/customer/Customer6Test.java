@@ -91,7 +91,7 @@ class Customer6Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
@@ -125,7 +125,7 @@ class Customer6Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
@@ -144,7 +144,7 @@ class Customer6Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressChanged event = (CustomerEmailAddressChanged) recordedEvents.get(0);
+        var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
         assertEquals(command.emailAddress, event.emailAddress);
         assertEquals(command.confirmationHash, event.confirmationHash);
@@ -194,7 +194,7 @@ class Customer6Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 

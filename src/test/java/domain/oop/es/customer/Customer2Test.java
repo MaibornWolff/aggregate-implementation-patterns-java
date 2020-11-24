@@ -41,8 +41,8 @@ class Customer2Test {
     @Test
     void registerCustomer() {
         // When RegisterCustomer
-        RegisterCustomer registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        CustomerRegistered customerRegistered = Customer2.register(registerCustomer);
+        var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        var customerRegistered = Customer2.register(registerCustomer);
 
         // Then CustomerRegistered
         assertNotNull(customerRegistered);
@@ -57,15 +57,15 @@ class Customer2Test {
     @Test
     void confirmEmailAddress() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ConfirmCustomerEmailAddress
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        List<Event> recordedEvents = customer.confirmEmailAddress(command);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        var recordedEvents = customer.confirmEmailAddress(command);
 
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
@@ -73,22 +73,22 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
     @Test
     void confirmEmailAddress_withWrongConfirmationHash() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        List<Event> recordedEvents = customer.confirmEmailAddress(command);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        var recordedEvents = customer.confirmEmailAddress(command);
 
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
@@ -96,7 +96,7 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
@@ -104,7 +104,7 @@ class Customer2Test {
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
                         CustomerEmailAddressConfirmed.build(customerID)
@@ -112,8 +112,8 @@ class Customer2Test {
         );
 
         // When ConfirmCustomerEmailAddress
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        List<Event> recordedEvents = customer.confirmEmailAddress(command);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        var recordedEvents = customer.confirmEmailAddress(command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -123,7 +123,7 @@ class Customer2Test {
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
                         CustomerEmailAddressConfirmed.build(customerID)
@@ -131,8 +131,8 @@ class Customer2Test {
         );
 
         // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        List<Event> recordedEvents = customer.confirmEmailAddress(command);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        var recordedEvents = customer.confirmEmailAddress(command);
 
         // Then CustomerEmailAddressConfirmationFailed
         assertEquals(1, recordedEvents.size());
@@ -140,22 +140,22 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
     @Test
     void changeCustomerEmailAddress() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ChangeCustomerEmailAddress
-        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        List<Event> recordedEvents = customer.changeEmailAddress(command);
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var recordedEvents = customer.changeEmailAddress(command);
 
         // Then CustomerEmailAddressChanged
         assertEquals(1, recordedEvents.size());
@@ -163,7 +163,7 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressChanged event = (CustomerEmailAddressChanged) recordedEvents.get(0);
+        var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
         assertEquals(command.emailAddress, event.emailAddress);
         assertEquals(command.confirmationHash, event.confirmationHash);
@@ -172,15 +172,15 @@ class Customer2Test {
     @Test
     void changeCustomerEmailAddress_withUnchangedEmailAddress() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ChangeCustomerEmailAddress
-        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        List<Event> recordedEvents = customer.changeEmailAddress(command);
+        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
+        var recordedEvents = customer.changeEmailAddress(command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -190,7 +190,7 @@ class Customer2Test {
     void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressChanged
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
                         CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
@@ -198,8 +198,8 @@ class Customer2Test {
         );
 
         // When ChangeCustomerEmailAddress
-        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        List<Event> recordedEvents = customer.changeEmailAddress(command);
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var recordedEvents = customer.changeEmailAddress(command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -210,7 +210,7 @@ class Customer2Test {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
         //   and CustomerEmailAddressChanged
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
                         CustomerEmailAddressConfirmed.build(customerID),
@@ -219,8 +219,8 @@ class Customer2Test {
         );
 
         // When ConfirmCustomerEmailAddress
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        List<Event> recordedEvents = customer.confirmEmailAddress(command);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        var recordedEvents = customer.confirmEmailAddress(command);
 
         // Then CustomerEmailAddressConfirmed
         assertEquals(1, recordedEvents.size());
@@ -228,22 +228,22 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
     }
 
     @Test
     void changeCustomerName() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ChangeCustomerName
-        ChangeCustomerName command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        List<Event> recordedEvents = customer.changeName(command);
+        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
+        var recordedEvents = customer.changeName(command);
 
         // Then CustomerNameChanged
         assertEquals(1, recordedEvents.size());
@@ -251,7 +251,7 @@ class Customer2Test {
         assertNotNull(recordedEvents.get(0));
 
         //  and the payload should be as expected
-        CustomerNameChanged event = (CustomerNameChanged) recordedEvents.get(0);
+        var event = (CustomerNameChanged) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
         assertEquals(command.name, event.name);
     }
@@ -259,15 +259,15 @@ class Customer2Test {
     @Test
     void changeCustomerName_withUnchangedName() {
         // Given CustomerRegistered
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
         );
 
         // When ChangeCustomerName
-        ChangeCustomerName command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        List<Event> recordedEvents = customer.changeName(command);
+        var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
+        var recordedEvents = customer.changeName(command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
@@ -277,7 +277,7 @@ class Customer2Test {
     void changeCustomerName_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerNameChanged
-        Customer2 customer = Customer2.reconstitute(
+        var customer = Customer2.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
                         CustomerNameChanged.build(customerID, changedName)
@@ -285,8 +285,8 @@ class Customer2Test {
         );
 
         // When ChangeCustomerName
-        ChangeCustomerName command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        List<Event> recordedEvents = customer.changeName(command);
+        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
+        var recordedEvents = customer.changeName(command);
 
         // Then no event
         assertEquals(0, recordedEvents.size());
