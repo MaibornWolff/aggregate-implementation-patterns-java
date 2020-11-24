@@ -17,7 +17,11 @@ public final class Hash {
         return new Hash(hash);
     }
 
-    public boolean equals(Hash other) {
-        return value.equals(other.value);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hash hash = (Hash) o;
+        return value.equals(hash.value);
     }
 }

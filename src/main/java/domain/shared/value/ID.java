@@ -17,7 +17,11 @@ public final class ID {
         return new ID(id);
     }
 
-    public boolean equals(ID other) {
-        return value.equals(other.value);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ID id = (ID) o;
+        return value.equals(id.value);
     }
 }

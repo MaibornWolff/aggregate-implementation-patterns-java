@@ -11,7 +11,11 @@ public final class EmailAddress {
         return new EmailAddress(emailAddress);
     }
 
-    public boolean equals(EmailAddress other) {
-        return value.equals(other.value);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmailAddress that = (EmailAddress) o;
+        return value.equals(that.value);
     }
 }

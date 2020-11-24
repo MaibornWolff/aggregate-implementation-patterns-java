@@ -13,9 +13,12 @@ public final class PersonName {
         return new PersonName(givenName, familyName);
     }
 
-    public boolean equals(PersonName other) {
-        if (!givenName.equals(other.givenName)) return false;
-
-        return familyName.equals(other.familyName);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonName that = (PersonName) o;
+        return givenName.equals(that.givenName) &&
+                familyName.equals(that.familyName);
     }
 }
