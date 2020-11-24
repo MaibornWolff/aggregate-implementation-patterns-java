@@ -120,7 +120,7 @@ class Customer4Test {
         var changedCustomer = Customer4.changeName(registeredCustomer, command);
 
         // Then it should expose the expected state
-        assertTrue(command.name.equals(changedCustomer.name));
+        assertEquals(changedCustomer.name, command.name);
     }
 
     /**
@@ -147,10 +147,5 @@ class Customer4Test {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer = Customer4.changeEmailAddress(registeredCustomer, command);
-    }
-
-    private void givenNameWasChanged() {
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        registeredCustomer = Customer4.changeName(registeredCustomer, command);
     }
 }

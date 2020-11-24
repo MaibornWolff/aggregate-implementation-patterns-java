@@ -51,10 +51,10 @@ class Customer6Test {
         assertNotNull(customerRegistered);
 
         //  and the payload should be as expected
-        assertTrue(customerRegistered.customerID.equals(registerCustomer.customerID));
-        assertTrue(customerRegistered.emailAddress.equals(registerCustomer.emailAddress));
-        assertTrue(customerRegistered.confirmationHash.equals(registerCustomer.confirmationHash));
-        assertTrue(customerRegistered.name.equals(registerCustomer.name));
+        assertEquals(registerCustomer.customerID, customerRegistered.customerID);
+        assertEquals(registerCustomer.emailAddress, customerRegistered.emailAddress);
+        assertEquals(registerCustomer.confirmationHash, customerRegistered.confirmationHash);
+        assertEquals(registerCustomer.name, customerRegistered.name);
     }
 
     @Test
@@ -73,7 +73,7 @@ class Customer6Test {
 
         //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
+        assertEquals(command.customerID, event.customerID);
     }
 
     @Test
@@ -92,7 +92,7 @@ class Customer6Test {
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
+        assertEquals(command.customerID, event.customerID);
     }
 
     @Test
@@ -126,7 +126,7 @@ class Customer6Test {
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmationFailed event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
+        assertEquals(command.customerID, event.customerID);
     }
 
     @Test
@@ -145,9 +145,9 @@ class Customer6Test {
 
         //  and the payload should be as expected
         CustomerEmailAddressChanged event = (CustomerEmailAddressChanged) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
-        assertTrue(event.emailAddress.equals(command.emailAddress));
-        assertTrue(event.confirmationHash.equals(command.confirmationHash));
+        assertEquals(command.customerID, event.customerID);
+        assertEquals(command.emailAddress, event.emailAddress);
+        assertEquals(command.confirmationHash, event.confirmationHash);
     }
 
     @Test
@@ -195,7 +195,7 @@ class Customer6Test {
 
         //  and the payload should be as expected
         CustomerEmailAddressConfirmed event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
+        assertEquals(command.customerID, event.customerID);
     }
 
     @Test
@@ -214,8 +214,8 @@ class Customer6Test {
 
         //  and the payload should be as expected
         var event = (CustomerNameChanged) recordedEvents.get(0);
-        assertTrue(event.customerID.equals(command.customerID));
-        assertTrue(event.name.equals(command.name));
+        assertEquals(command.customerID, event.customerID);
+        assertEquals(command.name, event.name);
     }
 
     @Test

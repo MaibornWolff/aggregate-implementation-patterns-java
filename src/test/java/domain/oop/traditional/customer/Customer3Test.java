@@ -47,10 +47,10 @@ class Customer3Test {
         // Then it should succeed
         // and should have the expected state
         assertNotNull(customer);
-        assertTrue(command.customerID.equals(customer.id));
-        assertTrue(command.name.equals(customer.name));
-        assertTrue(command.emailAddress.equals(customer.emailAddress));
-        assertTrue(command.confirmationHash.equals(customer.confirmationHash));
+        assertEquals(customer.id, command.customerID);
+        assertEquals(customer.name, command.name);
+        assertEquals(customer.emailAddress, command.emailAddress);
+        assertEquals(customer.confirmationHash, command.confirmationHash);
         assertFalse(customer.isEmailAddressConfirmed);
     }
 
@@ -92,8 +92,8 @@ class Customer3Test {
         registeredCustomer.changeEmailAddress(command);
 
         // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
-        assertTrue(command.emailAddress.equals(registeredCustomer.emailAddress));
-        assertTrue(command.confirmationHash.equals(registeredCustomer.confirmationHash));
+        assertEquals(registeredCustomer.emailAddress, command.emailAddress);
+        assertEquals(registeredCustomer.confirmationHash, command.confirmationHash);
         assertFalse(registeredCustomer.isEmailAddressConfirmed);
     }
 
@@ -123,7 +123,7 @@ class Customer3Test {
         registeredCustomer.changeName(command);
 
         // Then it should have the expected state
-        assertTrue(command.name.equals(registeredCustomer.name));
+        assertEquals(registeredCustomer.name, command.name);
     }
 
     /**
@@ -150,10 +150,5 @@ class Customer3Test {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer.changeEmailAddress(command);
-    }
-
-    private void givenNameWasChanged() {
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        registeredCustomer.changeName(command);
     }
 }
