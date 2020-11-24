@@ -15,18 +15,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Customer4Test {
-    // assigned via givenARegisteredCustomer()
-    private CustomerState registeredCustomer;
     private ID customerID;
     private Hash confirmationHash;
-
-    // assigned via beforeEach() + used as input in given....() methods and in test cases
     private PersonName name;
     private EmailAddress emailAddress;
     private EmailAddress changedEmailAddress;
     private Hash wrongConfirmationHash;
     private Hash changedConfirmationHash;
     private PersonName changedName;
+    private CustomerState registeredCustomer;
 
     @BeforeEach
     void beforeEach() {
