@@ -25,24 +25,29 @@ public class CustomerState {
 
     private void apply(List<Event> events) {
         for (Event event : events) {
-            apply(event);
-        }
-    }
+            if (event.getClass() == CustomerRegistered.class) {
+                emailAddress = ((CustomerRegistered) event).emailAddress;
+                confirmationHash = ((CustomerRegistered) event).confirmationHash;
+                name = ((CustomerRegistered) event).name;
+                isEmailAddressConfirmed = false;
+                continue;
+            }
 
-    private void apply(Event event) {
-        if (event.getClass() == CustomerRegistered.class) {
-            emailAddress = ((CustomerRegistered) event).emailAddress;
-            confirmationHash = ((CustomerRegistered) event).confirmationHash;
-            name = ((CustomerRegistered) event).name;
-            isEmailAddressConfirmed = false;
-        } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
-            isEmailAddressConfirmed = true;
-        } else if (event.getClass() == CustomerEmailAddressChanged.class) {
-            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-            isEmailAddressConfirmed = false;
-        } else if (event.getClass() == CustomerNameChanged.class) {
-            name = ((CustomerNameChanged) event).name;
+            if (event.getClass() == CustomerEmailAddressConfirmed.class) {
+                isEmailAddressConfirmed = true;
+                continue;
+            }
+
+            if (event.getClass() == CustomerEmailAddressChanged.class) {
+                emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
+                confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
+                isEmailAddressConfirmed = false;
+                continue;
+            }
+
+            if (event.getClass() == CustomerNameChanged.class) {
+                name = ((CustomerNameChanged) event).name;
+            }
         }
     }
 }
