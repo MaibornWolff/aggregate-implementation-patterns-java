@@ -59,19 +59,11 @@ public final class Customer1 {
     }
 
     public void changeEmailAddress(ChangeCustomerEmailAddress command) {
-        if (!command.emailAddress.equals(emailAddress)) {
-            recordThat(
-                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
-            );
-        }
-    }
-
-    public void changeName(ChangeCustomerName command) {
-        if (!command.name.equals(name)) {
-            recordThat(
-                    CustomerNameChanged.build(command.customerID, command.name)
-            );
-        }
+//        if (!command.emailAddress.equals(emailAddress)) {
+//            recordThat(
+//                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
+//            );
+//        }
     }
 
     public List<Event> getRecordedEvents() {
@@ -90,17 +82,15 @@ public final class Customer1 {
 
     void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
-            emailAddress = ((CustomerRegistered) event).emailAddress;
+//            emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
-            name = ((CustomerRegistered) event).name;
+//            name = ((CustomerRegistered) event).name;
         } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
             isEmailAddressConfirmed = true;
         } else if (event.getClass() == CustomerEmailAddressChanged.class) {
-            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-            isEmailAddressConfirmed = false;
-        } else if (event.getClass() == CustomerNameChanged.class) {
-            name = ((CustomerNameChanged) event).name;
+//            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
+//            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
+//            isEmailAddressConfirmed = false;
         }
     }
 }
