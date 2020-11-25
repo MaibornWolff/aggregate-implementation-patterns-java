@@ -8,13 +8,13 @@ import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
 import domain.shared.value.PersonName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Customer1Test {
     private ID customerID;
     private EmailAddress emailAddress;
@@ -37,226 +37,86 @@ class Customer1Test {
     }
 
     @Test
+    @Order(1)
     void registerCustomer() {
         WHEN_RegisterCustomer();
         THEN_CustomerRegistered();
     }
 
-    void WHEN_RegisterCustomer() {
-        var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        registeredCustomer = Customer1.register(registerCustomer);
-        customerID = registerCustomer.customerID;
-        confirmationHash = registerCustomer.confirmationHash;
-    }
-
-    void THEN_CustomerRegistered() {
-        String failMsg;
-
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "HINT: Check your register() method - build a CustomerRegistered event and use recordThat() to record it!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-        failMsg = "HINT: Check your register() method - the event you recorded is NULL!\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-        failMsg = "HINT: Check your register() method - you recorded the wrong event!\n";
-        assertEquals(CustomerRegistered.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var customerRegistered = (CustomerRegistered) recordedEvents.get(0);
-        failMsg = "HINT: Check your register() method - the customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, customerRegistered.customerID, failMsg);
-        failMsg = "HINT: Check your register() method - the emailAddress in the event should be taken from the command!\n";
-        assertEquals(emailAddress, customerRegistered.emailAddress, failMsg);
-        failMsg = "HINT: Check your register() method - the confirmationHash in the event should be taken from the command!\n";
-        assertEquals(confirmationHash, customerRegistered.confirmationHash, failMsg);
-        failMsg = "HINT: Check your register() method - the name in the event should be taken from the command!\n";
-        assertEquals(name, customerRegistered.name, failMsg);
-    }
-
     @Test
+    @Order(2)
     void confirmEmailAddress() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmCustomerEmailAddress_withMatchingConfirmationHash();
+        WHEN_ConfirmCustomerEmailAddress_With(confirmationHash);
         THEN_CustomerEmailAddressConfirmed();
     }
 
-    void WHEN_ConfirmCustomerEmailAddress_withMatchingConfirmationHash() {
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        try {
-            registeredCustomer.confirmEmailAddress(command);
-        } catch (NullPointerException e) {
-            fail("HINT: The confirmationHash is null - maybe you didn't apply the previous events properly!?");
-        }
-    }
-
-    void THEN_CustomerEmailAddressConfirmed() {
-        String failMsg;
-
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "HINT: Check your confirmEmailAddress() method - build a CustomerEmailAddressConfirmed event and use recordThat() to record it!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-        failMsg = "HINT: Check your confirmEmailAddress() method - the event you recorded is NULL!\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-        failMsg = "HINT: Check the business logic in your confirmEmailAddress() method - you recorded the wrong even!\n";
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        failMsg = "HINT: Check your confirmEmailAddress() method - the customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, event.customerID, failMsg);
-    }
-
     @Test
+    @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmCustomerEmailAddress_withWrongConfirmationHash();
+        WHEN_ConfirmCustomerEmailAddress_With(wrongConfirmationHash);
         THEN_CustomerEmailAddressConfirmationFailed();
     }
 
-    void WHEN_ConfirmCustomerEmailAddress_withWrongConfirmationHash() {
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        try {
-            registeredCustomer.confirmEmailAddress(command);
-        } catch (NullPointerException e) {
-            fail("HINT: The confirmationHash is null - maybe you didn't apply the previous events properly!?");
-        }
-    }
-
-    void THEN_CustomerEmailAddressConfirmationFailed() {
-        String failMsg;
-
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "HINT: Check your confirmEmailAddress() method - build a CustomerEmailAddressConfirmationFailed event and use recordThat() to record it!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-        failMsg = "HINT: Check your confirmEmailAddress() method - the event you recorded is NULL!\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-        failMsg = "HINT: Check the business logic in your confirmEmailAddress() method - you recorded the wrong even!\n";
-        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        failMsg = "HINT: Check your confirmEmailAddress() method - the customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, event.customerID, failMsg);
-    }
-
     @Test
+    @Order(4)
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         GIVEN_CustomerRegistered();
         __and_CustomerEmailAddressWasConfirmed();
-        WHEN_ConfirmCustomerEmailAddress();
+        WHEN_ConfirmCustomerEmailAddress_With(confirmationHash);
         THEN_NoEvent();
     }
 
-    void WHEN_ConfirmCustomerEmailAddress() {
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        try {
-            registeredCustomer.confirmEmailAddress(command);
-        } catch (NullPointerException e) {
-            fail("HINT: The confirmationHash is null - maybe you didn't apply the previous events properly!?");
-        }
-    }
-
-    void THEN_NoEvent() {
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-        var failMsg = "HINT: Check the business logic in your confirmEmailAddress() method - the emailAddress should already be confirmed!\n" +
-                "      Did you apply all previous events properly?\n" +
-                "      No event expected but you recorded: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(0, recordedEvents.size(), failMsg);
-    }
-
     @Test
+    @Order(5)
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        // Given
         GIVEN_CustomerRegistered();
         __and_CustomerEmailAddressWasConfirmed();
-
-        // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        registeredCustomer.confirmEmailAddress(command);
-
-        // Then CustomerEmailAddressConfirmationFailed
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        WHEN_ConfirmCustomerEmailAddress_With(wrongConfirmationHash);
+        THEN_CustomerEmailAddressConfirmationFailed();
     }
 
     @Test
+    @Order(6)
     void changeCustomerEmailAddress() {
         // Given
         GIVEN_CustomerRegistered();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        registeredCustomer.changeEmailAddress(command);
-
-        // Then CustomerEmailAddressChanged
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
-        assertEquals(command.emailAddress, event.emailAddress);
+        WHEN_ChangeCustomerEmailAddress_With(changedEmailAddress);
+        THEN_CustomerEmailAddressChanged();
     }
 
     @Test
+    @Order(7)
     void changeCustomerEmailAddress_withUnchangedEmailAddress() {
-        // Given
         GIVEN_CustomerRegistered();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        registeredCustomer.changeEmailAddress(command);
-
-        // Then no event
-        assertEquals(0, registeredCustomer.getRecordedEvents().size());
+        WHEN_ChangeCustomerEmailAddress_With(emailAddress);
+        THEN_NoEvent();
     }
 
     @Test
+    @Order(8)
     void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
-        // Given
         GIVEN_CustomerRegistered();
-        andCustomerEmailAddressWasChanged();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        registeredCustomer.changeEmailAddress(command);
-
-        // Then no event
-        assertEquals(0, registeredCustomer.getRecordedEvents().size());
+        __and_CustomerEmailAddressWasChanged();
+        WHEN_ChangeCustomerEmailAddress_With(changedEmailAddress);
+        THEN_NoEvent();
     }
 
     @Test
+    @Order(9)
     void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        // Given
         GIVEN_CustomerRegistered();
         __and_CustomerEmailAddressWasConfirmed();
-        andCustomerEmailAddressWasChanged();
-
-        // When ConfirmCustomerEmailAddress
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        registeredCustomer.confirmEmailAddress(command);
-
-        // Then CustomerEmailAddressConfirmed
-        var recordedEvents = registeredCustomer.getRecordedEvents();
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        __and_CustomerEmailAddressWasChanged();
+        WHEN_ConfirmCustomerEmailAddress_With(changedConfirmationHash);
+        THEN_CustomerEmailAddressConfirmed();
     }
 
     /**
-     * Helper methods to set up the Given state
+     * Methods for GIVEN
      */
+
     private void GIVEN_CustomerRegistered() {
         registeredCustomer = Customer1.reconstitute(
                 List.of(
@@ -271,13 +131,186 @@ class Customer1Test {
         );
     }
 
-    private void andCustomerEmailAddressWasChanged() {
+    private void __and_CustomerEmailAddressWasChanged() {
         registeredCustomer.apply(
                 CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
         );
     }
 
-    String getClassnameOfFirst(List<Event> recordedEvents) {
+    /**
+     * Methods for WHEN
+     */
+
+    private void WHEN_RegisterCustomer() {
+        var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        registeredCustomer = Customer1.register(registerCustomer);
+        customerID = registerCustomer.customerID;
+        confirmationHash = registerCustomer.confirmationHash;
+    }
+
+    private void WHEN_ConfirmCustomerEmailAddress_With(Hash confirmationHash) {
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        try {
+            registeredCustomer.confirmEmailAddress(command);
+        } catch (NullPointerException e) {
+            fail("PROBLEM: The confirmationHash is null!\n" +
+                    "HINT: Maybe you didn't apply the previous events properly!?\n");
+        }
+    }
+
+    private void WHEN_ChangeCustomerEmailAddress_With(EmailAddress emailAddress) {
+        var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
+        try {
+            registeredCustomer.changeEmailAddress(command);
+        } catch (NullPointerException e) {
+            fail("PROBLEM: The emailAddress is null!\n" +
+                    "HINT: Maybe you didn't apply the previous events properly!?\n");
+        }
+    }
+
+    /**
+     * Methods for THEN
+     */
+
+    void THEN_CustomerRegistered() {
+        String failMsg;
+
+        var recordedEvents = registeredCustomer.getRecordedEvents();
+
+        failMsg = "PROBLEM in register(): No event was recorded!\n" +
+                "HINT: Build a CustomerRegistered event and use recordThat() to record it!\n";
+        assertEquals(1, recordedEvents.size(), failMsg);
+
+        failMsg = "PROBLEM in register(): The recorded event is NULL!\n" +
+                "HINT: There must be some weird code ;-)\n";
+        assertNotNull(recordedEvents.get(0), failMsg);
+
+        failMsg = "PROBLEM in register(): An event of the wrong type was recorded!\n" +
+                "HINT: You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
+        assertEquals(CustomerRegistered.class, recordedEvents.get(0).getClass(), failMsg);
+
+        var customerRegistered = (CustomerRegistered) recordedEvents.get(0);
+
+        failMsg = "PROBLEM in register(): The event contains a wrong customerID!\n" +
+                "HINT: The customerID in the event should be taken from the command!\n";
+        assertEquals(customerID, customerRegistered.customerID, failMsg);
+
+        failMsg = "PROBLEM in register(): The event contains a wrong emailAddress!\n" +
+                "HINT: The emailAddress in the event should be taken from the command!\n";
+        assertEquals(emailAddress, customerRegistered.emailAddress, failMsg);
+
+        failMsg = "PROBLEM in register(): The event contains a wrong confirmationHash!\n" +
+                "HINT: The confirmationHash in the event should be taken from the command!\n";
+        assertEquals(confirmationHash, customerRegistered.confirmationHash, failMsg);
+
+        failMsg = "PROBLEM in register(): The event contains a wrong name!\n" +
+                "HINT: The name in the event should be taken from the command!\n";
+        assertEquals(name, customerRegistered.name, failMsg);
+    }
+
+    void THEN_CustomerEmailAddressConfirmed() {
+        String failMsg;
+
+        var recordedEvents = registeredCustomer.getRecordedEvents();
+
+        failMsg = "PROBLEM in confirmEmailAddress(): No event was recorded!\n" +
+                "HINTS: Build a CustomerEmailAddressConfirmed event and use recordThat() to record it!\n" +
+                "       Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n";
+        assertEquals(1, recordedEvents.size(), failMsg);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): The recorded event is NULL!\n" +
+                "HINT: There must be some weird code ;-)\n";
+        assertNotNull(recordedEvents.get(0), failMsg);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): An event of the wrong type was recorded!\n" +
+                "HINTS: Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n" +
+                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
+        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass(), failMsg);
+
+        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): The event contains a wrong customerID!\n" +
+                "HINT: The customerID in the event should be taken from the command!\n";
+        assertEquals(customerID, event.customerID, failMsg);
+    }
+
+    void THEN_CustomerEmailAddressConfirmationFailed() {
+        String failMsg;
+
+        var recordedEvents = registeredCustomer.getRecordedEvents();
+
+        failMsg = "PROBLEM in confirmEmailAddress(): No event was recorded!\n" +
+                "HINTS: Build a CustomerEmailAddressConfirmed event and use recordThat() to record it!\n" +
+                "       Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n";
+        assertEquals(1, recordedEvents.size(), failMsg);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): The recorded event is NULL!\n" +
+                "HINT: There must be some weird code ;-)\n";
+        assertNotNull(recordedEvents.get(0), failMsg);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): An event of the wrong type was recorded!\n" +
+                "HINTS: Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n" +
+                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
+        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass(), failMsg);
+
+        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
+
+        failMsg = "PROBLEM in confirmEmailAddress(): The event contains a wrong customerID!\n" +
+                "HINT: The customerID in the event should be taken from the command!\n";
+        assertEquals(customerID, event.customerID, failMsg);
+    }
+
+    private void THEN_CustomerEmailAddressChanged() {
+        String failMsg;
+
+        var recordedEvents = registeredCustomer.getRecordedEvents();
+
+        failMsg = "PROBLEM in changeEmailAddress(): No event was recorded!\n" +
+                "HINTS: Build a CustomerEmailAddressChanged event and use recordThat() to record it!\n" +
+                "       Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n";
+        assertEquals(1, recordedEvents.size(), failMsg);
+
+        failMsg = "PROBLEM in changeEmailAddress(): The recorded event is NULL!\n" +
+                "HINT: There must be some weird code ;-)\n";
+        assertNotNull(recordedEvents.get(0), failMsg);
+
+        failMsg = "PROBLEM in changeEmailAddress(): An event of the wrong type was recorded!\n" +
+                "HINTS: Did you apply all previous events properly?\n" +
+                "       Check your business logic :-)!\n" +
+                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
+        assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass(), failMsg);
+
+        var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
+
+        failMsg = "PROBLEM in changeEmailAddress(): The event contains a wrong customerID!\n" +
+                "HINT: The customerID in the event should be taken from the command!\n";
+        assertEquals(customerID, event.customerID, failMsg);
+
+        failMsg = "PROBLEM in changeEmailAddress(): The event contains a wrong emailAddress!\n" +
+                "HINT: The customerID in the event should be taken from the command!\n";
+        assertEquals(changedEmailAddress, event.emailAddress, failMsg);
+    }
+
+    void THEN_NoEvent() {
+        var recordedEvents = registeredCustomer.getRecordedEvents();
+
+        var failMsg = "PROBLEM: No event should have been recorded!\n" +
+                "HINTS: Check your business logic - this command should be ignored (idempotency)!\n" +
+                "       Did you apply all previous events properly?\n" +
+                "       The recorded event is of type: " + getClassnameOfFirst(recordedEvents) + "\n";
+        assertEquals(0, recordedEvents.size(), failMsg);
+    }
+
+    /**
+     * Helper methods
+     */
+
+    private String getClassnameOfFirst(List<Event> recordedEvents) {
         if (recordedEvents.size() == 0) {
             return "???";
         }

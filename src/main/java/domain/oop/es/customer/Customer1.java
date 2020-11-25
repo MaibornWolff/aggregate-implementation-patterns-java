@@ -1,7 +1,6 @@
 package domain.oop.es.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
@@ -59,11 +58,11 @@ public final class Customer1 {
     }
 
     public void changeEmailAddress(ChangeCustomerEmailAddress command) {
-//        if (!command.emailAddress.equals(emailAddress)) {
-//            recordThat(
-//                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
-//            );
-//        }
+        if (!command.emailAddress.equals(emailAddress)) {
+            recordThat(
+                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
+            );
+        }
     }
 
     public List<Event> getRecordedEvents() {
@@ -82,15 +81,15 @@ public final class Customer1 {
 
     void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
-//            emailAddress = ((CustomerRegistered) event).emailAddress;
+            emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
-//            name = ((CustomerRegistered) event).name;
+            name = ((CustomerRegistered) event).name;
         } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
             isEmailAddressConfirmed = true;
         } else if (event.getClass() == CustomerEmailAddressChanged.class) {
-//            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-//            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-//            isEmailAddressConfirmed = false;
+            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
+            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
+            isEmailAddressConfirmed = false;
         }
     }
 }
