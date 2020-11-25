@@ -1,5 +1,6 @@
 package domain.functional.es.customer;
 
+import domain.shared.Hints;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
@@ -11,13 +12,14 @@ import domain.shared.value.ID;
 import domain.shared.value.PersonName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// copy of Customer6Test since the method signatures are the same
 class Customer7Test {
     private ID customerID;
     private EmailAddress emailAddress;
@@ -28,6 +30,8 @@ class Customer7Test {
     private PersonName name;
     private PersonName changedName;
     private List<Event> eventStream;
+    private CustomerRegistered customerRegistered;
+    private List<Event> recordedEvents;
 
     @BeforeEach
     void beforeEach() {
@@ -40,228 +44,212 @@ class Customer7Test {
         name = PersonName.build("John", "Doe");
         changedName = PersonName.build("Jayne", "Doe");
         eventStream = new ArrayList<>();
+        recordedEvents = new ArrayList<>();
     }
 
     @Test
     void registerCustomer() {
-        // When RegisterCustomer
+        WHEN_RegisterCustomer();
+        THEN_CustomerRegistered();
+    }
+
+    void WHEN_RegisterCustomer() {
         var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        var customerRegistered = Customer7.register(registerCustomer);
+        customerRegistered = Customer7.register(registerCustomer);
+        customerID = registerCustomer.customerID;
+        confirmationHash = registerCustomer.confirmationHash;
+    }
 
-        // Then CustomerRegistered
-        assertNotNull(customerRegistered);
+    void THEN_CustomerRegistered() {
+        assertNotNull(customerRegistered, Hints.NULL_EVENT);
 
-        //  and the payload should be as expected
-        assertEquals(registerCustomer.customerID, customerRegistered.customerID);
-        assertEquals(registerCustomer.emailAddress, customerRegistered.emailAddress);
-        assertEquals(registerCustomer.confirmationHash, customerRegistered.confirmationHash);
-        assertEquals(registerCustomer.name, customerRegistered.name);
+        assertEquals(emailAddress, customerRegistered.emailAddress, Hints.WRONG_EMAIL_ADDRESS);
+        assertEquals(name, customerRegistered.name, Hints.WRONG_NAME);
+        assertEquals(customerID, customerRegistered.customerID, Hints.WRONG_CUSTOMER_ID);
+        assertEquals(confirmationHash, customerRegistered.confirmationHash, Hints.WRONG_CONFIRMATION_HASH);
     }
 
     @Test
     void confirmEmailAddress() {
-        // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        THEN_EmailAddressConfirmed();
+    }
 
-        // When ConfirmCustomerEmailAddress
+    void WHEN_ConfirmEmailAddress_withMatchingConfirmationHash() {
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
+        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
+    }
 
-        // Then CustomerEmailAddressConfirmed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
+    void THEN_EmailAddressConfirmed() {
+        assertEquals(1, recordedEvents.size(), Hints.WRONG_NUMBER_OF_EVENTS);
+        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass(), Hints.WRONG_EVENT);
+        assertNotNull(recordedEvents.get(0), Hints.NULL_EVENT);
 
-        //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        assertEquals(customerID, event.customerID, Hints.WRONG_CUSTOMER_ID);
     }
 
     @Test
     void confirmEmailAddress_withWrongConfirmationHash() {
-        // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ConfirmEmailAddress_withWrongConfirmationHash();
+        THEN_EmailAddressConfirmationFailed();
+    }
 
-        // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
+    void WHEN_ConfirmEmailAddress_withWrongConfirmationHash() {
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
+        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
+    }
 
-        // Then CustomerEmailAddressConfirmationFailed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
+    void THEN_EmailAddressConfirmationFailed() {
+        assertEquals(1, recordedEvents.size(), Hints.WRONG_NUMBER_OF_EVENTS);
+        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass(), Hints.WRONG_EVENT);
+        assertNotNull(recordedEvents.get(0), Hints.NULL_EVENT);
 
-        //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        assertEquals(customerID, event.customerID, Hints.WRONG_CUSTOMER_ID);
     }
 
     @Test
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
-        // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasConfirmed();
+        GIVEN_CustomerRegistered();
+        __and_EmailAddressWasConfirmed();
+        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        THEN_NothingShouldHappen();
+    }
 
-        // When ConfirmCustomerEmailAddress
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
+    void THEN_NothingShouldHappen() {
+        assertEquals(0, recordedEvents.size(), Hints.SHOULD_BE_NO_EVENT);
     }
 
     @Test
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasConfirmed();
-
-        // When ConfirmCustomerEmailAddress (with wrong confirmationHash)
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-
-        // Then CustomerEmailAddressConfirmationFailed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        GIVEN_CustomerRegistered();
+        __and_EmailAddressWasConfirmed();
+        WHEN_ConfirmEmailAddress_withWrongConfirmationHash();
+        THEN_EmailAddressConfirmationFailed();
     }
 
     @Test
     void changeCustomerEmailAddress() {
-        // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ChangeEmailAddress();
+        THEN_EmailAddressChanged();
+    }
 
-        // When ChangeCustomerEmailAddress
+    void WHEN_ChangeEmailAddress() {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
+        recordedEvents = Customer7.changeEmailAddress(eventStream, command);
+        confirmationHash = command.confirmationHash;
+    }
 
-        // Then CustomerEmailAddressChanged
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
+    void THEN_EmailAddressChanged() {
+        assertEquals(1, recordedEvents.size(), Hints.WRONG_NUMBER_OF_EVENTS);
+        assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass(), Hints.WRONG_EVENT);
+        assertNotNull(recordedEvents.get(0), Hints.NULL_EVENT);
 
-        //  and the payload should be as expected
         var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
-        assertEquals(command.emailAddress, event.emailAddress);
-        assertEquals(command.confirmationHash, event.confirmationHash);
+        assertEquals(customerID, event.customerID, Hints.WRONG_CUSTOMER_ID);
+        assertEquals(changedEmailAddress, event.emailAddress, Hints.WRONG_EMAIL_ADDRESS);
+        assertEquals(confirmationHash, event.confirmationHash, Hints.WRONG_CONFIRMATION_HASH);
     }
 
     @Test
     void changeCustomerEmailAddress_withUnchangedEmailAddress() {
         // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ChangeEmailAddress_withUnchangedEmailAddress();
+        THEN_NothingShouldHappen();
+    }
 
-        // When ChangeCustomerEmailAddress
+    void WHEN_ChangeEmailAddress_withUnchangedEmailAddress() {
         var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
+        recordedEvents = Customer7.changeEmailAddress(eventStream, command);
+        confirmationHash = command.confirmationHash;
     }
 
     @Test
     void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasChanged();
-
-        // When ChangeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var recordedEvents = Customer7.changeEmailAddress(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
+        GIVEN_CustomerRegistered();
+        __and_EmailAddressWasChanged();
+        WHEN_ChangeEmailAddress();
+        THEN_NothingShouldHappen();
     }
 
     @Test
     void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
-        givenARegisteredCustomer();
-        givenEmailAddressWasConfirmed();
-        givenEmailAddressWasChanged();
+        GIVEN_CustomerRegistered();
+        __and_EmailAddressWasConfirmed();
+        __and_EmailAddressWasChanged();
 
-        // When ConfirmCustomerEmailAddress
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-
-        // Then CustomerEmailAddressConfirmed
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
+        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        THEN_EmailAddressConfirmed();
     }
 
     @Test
     void changeCustomerName() {
-        // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ChangeName();
+        THEN_NameChanged();
+    }
 
-        // When ChangeCustomerName
+    void WHEN_ChangeName() {
         var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer7.changeName(eventStream, command);
+        recordedEvents = Customer7.changeName(eventStream, command);
+        name = changedName;
+    }
 
-        // Then CustomerNameChanged
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
+    void THEN_NameChanged() {
+        assertEquals(1, recordedEvents.size(), Hints.WRONG_NUMBER_OF_EVENTS);
+        assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass(), Hints.WRONG_EVENT);
+        assertNotNull(recordedEvents.get(0), Hints.NULL_EVENT);
 
-        //  and the payload should be as expected
         var event = (CustomerNameChanged) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
-        assertEquals(command.name, event.name);
+        assertEquals(customerID, event.customerID, Hints.WRONG_CUSTOMER_ID);
+        assertEquals(name, event.name, Hints.WRONG_NAME);
     }
 
     @Test
     void changeCustomerName_withUnchangedName() {
-        // Given
-        givenARegisteredCustomer();
+        GIVEN_CustomerRegistered();
+        WHEN_ChangeName_withUnchangedName();
+        THEN_NothingShouldHappen();
+    }
 
-        // When ChangeCustomerName
+    void WHEN_ChangeName_withUnchangedName() {
         var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        var recordedEvents = Customer7.changeName(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
+        recordedEvents = Customer7.changeName(eventStream, command);
     }
 
     @Test
     void changeCustomerName_whenItWasAlreadyChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenNameWasChanged();
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer7.changeName(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
+        GIVEN_CustomerRegistered();
+        GIVEN_NameWasChanged();
+        WHEN_ChangeName();
+        THEN_NothingShouldHappen();
     }
 
     /**
      * Helper methods to set up the Given state
      */
-    private void givenARegisteredCustomer() {
+    private void GIVEN_CustomerRegistered() {
         eventStream.add(CustomerRegistered.build(customerID, emailAddress, confirmationHash, name));
     }
 
-    private void givenEmailAddressWasConfirmed() {
+    private void __and_EmailAddressWasConfirmed() {
         eventStream.add(CustomerEmailAddressConfirmed.build(customerID));
     }
 
-    private void givenEmailAddressWasChanged() {
+    private void __and_EmailAddressWasChanged() {
         eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
+        emailAddress = changedEmailAddress;
+        confirmationHash = changedConfirmationHash;
     }
 
-    private void givenNameWasChanged() {
+    private void GIVEN_NameWasChanged() {
         eventStream.add(CustomerNameChanged.build(customerID, changedName));
+        name = changedName;
     }
 }
