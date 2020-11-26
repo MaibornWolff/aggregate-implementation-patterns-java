@@ -2,7 +2,6 @@ package domain.functional.es.customer;
 
 import domain.shared.Hints;
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
@@ -12,7 +11,6 @@ import domain.shared.value.ID;
 import domain.shared.value.PersonName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,6 @@ class Customer7Test {
     private Hash wrongConfirmationHash;
     private Hash changedConfirmationHash;
     private PersonName name;
-    private PersonName changedName;
     private List<Event> eventStream;
     private CustomerRegistered customerRegistered;
     private List<Event> recordedEvents;
@@ -42,7 +39,6 @@ class Customer7Test {
         wrongConfirmationHash = Hash.generate();
         changedConfirmationHash = Hash.generate();
         name = PersonName.build("John", "Doe");
-        changedName = PersonName.build("Jayne", "Doe");
         eventStream = new ArrayList<>();
         recordedEvents = new ArrayList<>();
     }
@@ -188,49 +184,6 @@ class Customer7Test {
         THEN_EmailAddressConfirmed();
     }
 
-    @Test
-    void changeCustomerName() {
-        GIVEN_CustomerRegistered();
-        WHEN_ChangeName();
-        THEN_NameChanged();
-    }
-
-    void WHEN_ChangeName() {
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        recordedEvents = Customer7.changeName(eventStream, command);
-        name = changedName;
-    }
-
-    void THEN_NameChanged() {
-        assertEquals(1, recordedEvents.size(), Hints.WRONG_NUMBER_OF_EVENTS);
-        assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass(), Hints.WRONG_EVENT);
-        assertNotNull(recordedEvents.get(0), Hints.NULL_EVENT);
-
-        var event = (CustomerNameChanged) recordedEvents.get(0);
-        assertEquals(customerID, event.customerID, Hints.WRONG_CUSTOMER_ID);
-        assertEquals(name, event.name, Hints.WRONG_NAME);
-    }
-
-    @Test
-    void changeCustomerName_withUnchangedName() {
-        GIVEN_CustomerRegistered();
-        WHEN_ChangeName_withUnchangedName();
-        THEN_NothingShouldHappen();
-    }
-
-    void WHEN_ChangeName_withUnchangedName() {
-        var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        recordedEvents = Customer7.changeName(eventStream, command);
-    }
-
-    @Test
-    void changeCustomerName_whenItWasAlreadyChanged() {
-        GIVEN_CustomerRegistered();
-        GIVEN_NameWasChanged();
-        WHEN_ChangeName();
-        THEN_NothingShouldHappen();
-    }
-
     /**
      * Helper methods to set up the Given state
      */
@@ -246,10 +199,5 @@ class Customer7Test {
         eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
         emailAddress = changedEmailAddress;
         confirmationHash = changedConfirmationHash;
-    }
-
-    private void GIVEN_NameWasChanged() {
-        eventStream.add(CustomerNameChanged.build(customerID, changedName));
-        name = changedName;
     }
 }
