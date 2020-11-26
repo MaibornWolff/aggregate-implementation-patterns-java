@@ -1,7 +1,6 @@
 package domain.functional.es.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
@@ -40,15 +39,5 @@ public class Customer6 {
         }
 
         return List.of(CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash));
-    }
-
-    public static List<Event> changeName(List<Event> eventStream, ChangeCustomerName command) {
-        var current = CustomerState.reconstitute(eventStream);
-
-        if (current.name.equals(command.name)) {
-            return List.of();
-        }
-
-        return List.of(CustomerNameChanged.build(command.customerID, command.name));
     }
 }

@@ -1,7 +1,6 @@
 package domain.functional.es.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
@@ -15,7 +14,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class Customer6Test {
     private ID customerID;
@@ -198,53 +198,6 @@ class Customer6Test {
         assertEquals(command.customerID, event.customerID);
     }
 
-    @Test
-    void changeCustomerName() {
-        // Given
-        givenARegisteredCustomer();
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer6.changeName(eventStream, command);
-
-        // Then CustomerNameChanged
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerNameChanged) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
-        assertEquals(command.name, event.name);
-    }
-
-    @Test
-    void changeCustomerName_withUnchangedName() {
-        // Given
-        givenARegisteredCustomer();
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        var recordedEvents = Customer6.changeName(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void changeCustomerName_whenItWasAlreadyChanged() {
-        // Given
-        givenARegisteredCustomer();
-        givenNameWasChanged();
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer6.changeName(eventStream, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
     /**
      * Helper methods to set up the Given state
      */
@@ -258,9 +211,5 @@ class Customer6Test {
 
     private void givenEmailAddressWasChanged() {
         eventStream.add(CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash));
-    }
-
-    private void givenNameWasChanged() {
-        eventStream.add(CustomerNameChanged.build(customerID, changedName));
     }
 }
