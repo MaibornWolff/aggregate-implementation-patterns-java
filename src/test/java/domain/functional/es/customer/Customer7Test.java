@@ -55,7 +55,7 @@ class Customer7Test {
     @Order(2)
     void confirmEmailAddress() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_EmailAddressConfirmed();
     }
 
@@ -63,7 +63,7 @@ class Customer7Test {
     @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmEmailAddress_withWrongConfirmationHash();
+        WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
 
@@ -72,7 +72,7 @@ class Customer7Test {
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasConfirmed();
-        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_NothingShouldHappen();
     }
 
@@ -81,7 +81,7 @@ class Customer7Test {
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasConfirmed();
-        WHEN_ConfirmEmailAddress_withWrongConfirmationHash();
+        WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
 
@@ -89,7 +89,7 @@ class Customer7Test {
     @Order(6)
     void changeCustomerEmailAddress() {
         GIVEN_CustomerRegistered();
-        WHEN_ChangeEmailAddress();
+        WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_EmailAddressChanged();
     }
 
@@ -98,7 +98,7 @@ class Customer7Test {
     void changeCustomerEmailAddress_withUnchangedEmailAddress() {
         // Given
         GIVEN_CustomerRegistered();
-        WHEN_ChangeEmailAddress_withUnchangedEmailAddress();
+        WHEN_ChangeEmailAddress_With(emailAddress);
         THEN_NothingShouldHappen();
     }
 
@@ -107,7 +107,7 @@ class Customer7Test {
     void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasChanged();
-        WHEN_ChangeEmailAddress();
+        WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_NothingShouldHappen();
     }
 
@@ -119,7 +119,7 @@ class Customer7Test {
         __and_EmailAddressWasConfirmed();
         __and_EmailAddressWasChanged();
 
-        WHEN_ConfirmEmailAddress_withMatchingConfirmationHash();
+        WHEN_ConfirmEmailAddress_With(changedConfirmationHash);
         THEN_EmailAddressConfirmed();
     }
 
@@ -152,23 +152,12 @@ class Customer7Test {
         confirmationHash = registerCustomer.confirmationHash;
     }
 
-    private void WHEN_ConfirmEmailAddress_withMatchingConfirmationHash() {
+    private void WHEN_ConfirmEmailAddress_With(Hash confirmationHash) {
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
         recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
     }
 
-    private void WHEN_ConfirmEmailAddress_withWrongConfirmationHash() {
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        recordedEvents = Customer7.confirmEmailAddress(eventStream, command);
-    }
-
-    private void WHEN_ChangeEmailAddress() {
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        recordedEvents = Customer7.changeEmailAddress(eventStream, command);
-        confirmationHash = command.confirmationHash;
-    }
-
-    private void WHEN_ChangeEmailAddress_withUnchangedEmailAddress() {
+    private void WHEN_ChangeEmailAddress_With(EmailAddress emailAddress) {
         var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
         recordedEvents = Customer7.changeEmailAddress(eventStream, command);
         confirmationHash = command.confirmationHash;
