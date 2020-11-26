@@ -58,7 +58,7 @@ public final class Customer1 {
     }
 
     public void changeEmailAddress(ChangeCustomerEmailAddress command) {
-        if (!command.emailAddress.equals(emailAddress)) {
+        if (!emailAddress.equals(command.emailAddress)) {
             recordThat(
                     CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
             );

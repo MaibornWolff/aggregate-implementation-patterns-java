@@ -1,7 +1,6 @@
 package domain.oop.es.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
@@ -49,12 +48,12 @@ public final class Customer2 {
         }
 
         return List.of(
-                CustomerEmailAddressConfirmed.build(command.customerID)
+                CustomerEmailAddressConfirmationFailed.build(command.customerID)
         );
     }
 
     public List<Event> changeEmailAddress(ChangeCustomerEmailAddress command) {
-        if (command.emailAddress.equals(emailAddress)) {
+        if (emailAddress.equals(command.emailAddress)) {
             return List.of();
         }
 
@@ -63,23 +62,13 @@ public final class Customer2 {
         );
     }
 
-    public List<Event> changeName(ChangeCustomerName command) {
-        if (command.name.equals(name)) {
-            return List.of();
-        }
-
-        return List.of(
-                CustomerNameChanged.build(command.customerID, command.name)
-        );
-    }
-
-    private void apply(List<Event> events) {
+    void apply(List<Event> events) {
         for (Event event : events) {
             apply(event);
         }
     }
 
-    private void apply(Event event) {
+    void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
             emailAddress = ((CustomerRegistered) event).emailAddress;
             confirmationHash = ((CustomerRegistered) event).confirmationHash;
@@ -90,8 +79,6 @@ public final class Customer2 {
             emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
             confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
             isEmailAddressConfirmed = false;
-        } else if (event.getClass() == CustomerNameChanged.class) {
-            name = ((CustomerNameChanged) event).name;
         }
     }
 }

@@ -1,9 +1,13 @@
 package domain.oop.es.customer;
 
+import domain.THelper;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
-import domain.shared.event.*;
+import domain.shared.event.CustomerEmailAddressChanged;
+import domain.shared.event.CustomerEmailAddressConfirmationFailed;
+import domain.shared.event.CustomerEmailAddressConfirmed;
+import domain.shared.event.CustomerRegistered;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
@@ -153,8 +157,7 @@ class Customer1Test {
         try {
             registeredCustomer.confirmEmailAddress(command);
         } catch (NullPointerException e) {
-            fail("PROBLEM: The confirmationHash is null!\n" +
-                    "HINT: Maybe you didn't apply the previous events properly!?\n");
+            fail(THelper.propertyIsNull("confirmationHash"));
         }
     }
 
@@ -163,8 +166,7 @@ class Customer1Test {
         try {
             registeredCustomer.changeEmailAddress(command);
         } catch (NullPointerException e) {
-            fail("PROBLEM: The emailAddress is null!\n" +
-                    "HINT: Maybe you didn't apply the previous events properly!?\n");
+            fail(THelper.propertyIsNull("emailAddress"));
         }
     }
 
@@ -173,148 +175,51 @@ class Customer1Test {
      */
 
     void THEN_CustomerRegistered() {
-        String failMsg;
-
+        var method = "register";
         var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "PROBLEM in register(): No event was recorded!\n" +
-                "HINT: Build a CustomerRegistered event and use recordThat() to record it!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-
-        failMsg = "PROBLEM in register(): The recorded event is NULL!\n" +
-                "HINT: There must be some weird code ;-)\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-
-        failMsg = "PROBLEM in register(): An event of the wrong type was recorded!\n" +
-                "HINT: You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(CustomerRegistered.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var customerRegistered = (CustomerRegistered) recordedEvents.get(0);
-
-        failMsg = "PROBLEM in register(): The event contains a wrong customerID!\n" +
-                "HINT: The customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, customerRegistered.customerID, failMsg);
-
-        failMsg = "PROBLEM in register(): The event contains a wrong emailAddress!\n" +
-                "HINT: The emailAddress in the event should be taken from the command!\n";
-        assertEquals(emailAddress, customerRegistered.emailAddress, failMsg);
-
-        failMsg = "PROBLEM in register(): The event contains a wrong confirmationHash!\n" +
-                "HINT: The confirmationHash in the event should be taken from the command!\n";
-        assertEquals(confirmationHash, customerRegistered.confirmationHash, failMsg);
-
-        failMsg = "PROBLEM in register(): The event contains a wrong name!\n" +
-                "HINT: The name in the event should be taken from the command!\n";
-        assertEquals(name, customerRegistered.name, failMsg);
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerRegistered"));
+        var event = recordedEvents.get(0);
+        assertNotNull(event, THelper.eventIsNull(method));
+        assertEquals(CustomerRegistered.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
+        assertEquals(customerID, ((CustomerRegistered) event).customerID, THelper.propertyIsWrong(method, "customerID"));
+        assertEquals(emailAddress, ((CustomerRegistered) event).emailAddress, THelper.propertyIsWrong(method, "emailAddress"));
+        assertEquals(confirmationHash, ((CustomerRegistered) event).confirmationHash, THelper.propertyIsWrong(method, "confirmationHash"));
+        assertEquals(name, ((CustomerRegistered) event).name, THelper.propertyIsWrong(method, "name"));
     }
 
     void THEN_CustomerEmailAddressConfirmed() {
-        String failMsg;
-
+        var method = "confirmEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "PROBLEM in confirmEmailAddress(): No event was recorded!\n" +
-                "HINTS: Build a CustomerEmailAddressConfirmed event and use recordThat() to record it!\n" +
-                "       Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): The recorded event is NULL!\n" +
-                "HINT: There must be some weird code ;-)\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): An event of the wrong type was recorded!\n" +
-                "HINTS: Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n" +
-                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(CustomerEmailAddressConfirmed.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): The event contains a wrong customerID!\n" +
-                "HINT: The customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, event.customerID, failMsg);
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmed"));
+        var event = recordedEvents.get(0);
+        assertNotNull(event, THelper.eventIsNull(method));
+        assertEquals(CustomerEmailAddressConfirmed.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
+        assertEquals(customerID, ((CustomerEmailAddressConfirmed) event).customerID, THelper.propertyIsWrong(method, "customerID"));
     }
 
     void THEN_CustomerEmailAddressConfirmationFailed() {
-        String failMsg;
-
+        var method = "confirmEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "PROBLEM in confirmEmailAddress(): No event was recorded!\n" +
-                "HINTS: Build a CustomerEmailAddressConfirmed event and use recordThat() to record it!\n" +
-                "       Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): The recorded event is NULL!\n" +
-                "HINT: There must be some weird code ;-)\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): An event of the wrong type was recorded!\n" +
-                "HINTS: Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n" +
-                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(CustomerEmailAddressConfirmationFailed.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var event = (CustomerEmailAddressConfirmationFailed) recordedEvents.get(0);
-
-        failMsg = "PROBLEM in confirmEmailAddress(): The event contains a wrong customerID!\n" +
-                "HINT: The customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, event.customerID, failMsg);
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmationFailed"));
+        var event = recordedEvents.get(0);
+        assertNotNull(event, THelper.eventIsNull(method));
+        assertEquals(CustomerEmailAddressConfirmationFailed.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
+        assertEquals(customerID, ((CustomerEmailAddressConfirmationFailed) event).customerID, THelper.propertyIsWrong(method, "customerID"));
     }
 
     private void THEN_CustomerEmailAddressChanged() {
-        String failMsg;
-
+        var method = "changeEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        failMsg = "PROBLEM in changeEmailAddress(): No event was recorded!\n" +
-                "HINTS: Build a CustomerEmailAddressChanged event and use recordThat() to record it!\n" +
-                "       Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n";
-        assertEquals(1, recordedEvents.size(), failMsg);
-
-        failMsg = "PROBLEM in changeEmailAddress(): The recorded event is NULL!\n" +
-                "HINT: There must be some weird code ;-)\n";
-        assertNotNull(recordedEvents.get(0), failMsg);
-
-        failMsg = "PROBLEM in changeEmailAddress(): An event of the wrong type was recorded!\n" +
-                "HINTS: Did you apply all previous events properly?\n" +
-                "       Check your business logic :-)!\n" +
-                "       You recorded an event of type: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(CustomerEmailAddressChanged.class, recordedEvents.get(0).getClass(), failMsg);
-
-        var event = (CustomerEmailAddressChanged) recordedEvents.get(0);
-
-        failMsg = "PROBLEM in changeEmailAddress(): The event contains a wrong customerID!\n" +
-                "HINT: The customerID in the event should be taken from the command!\n";
-        assertEquals(customerID, event.customerID, failMsg);
-
-        failMsg = "PROBLEM in changeEmailAddress(): The event contains a wrong emailAddress!\n" +
-                "HINT: The customerID in the event should be taken from the command!\n";
-        assertEquals(changedEmailAddress, event.emailAddress, failMsg);
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressChanged"));
+        var event = recordedEvents.get(0);
+        assertNotNull(event, THelper.eventIsNull(method));
+        assertEquals(CustomerEmailAddressChanged.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
+        assertEquals(customerID, ((CustomerEmailAddressChanged) event).customerID, THelper.propertyIsWrong(method, "customerID"));
+        assertEquals(changedEmailAddress, ((CustomerEmailAddressChanged) event).emailAddress, THelper.propertyIsWrong(method, "emailAddress"));
     }
 
     void THEN_NoEvent() {
         var recordedEvents = registeredCustomer.getRecordedEvents();
-
-        var failMsg = "PROBLEM: No event should have been recorded!\n" +
-                "HINTS: Check your business logic - this command should be ignored (idempotency)!\n" +
-                "       Did you apply all previous events properly?\n" +
-                "       The recorded event is of type: " + getClassnameOfFirst(recordedEvents) + "\n";
-        assertEquals(0, recordedEvents.size(), failMsg);
-    }
-
-    /**
-     * Helper methods
-     */
-
-    private String getClassnameOfFirst(List<Event> recordedEvents) {
-        if (recordedEvents.size() == 0) {
-            return "???";
-        }
-
-        return recordedEvents.get(0).getClass().toString();
+        assertEquals(0, registeredCustomer.getRecordedEvents().size(), THelper.noEventShouldHaveBeenRecorded(THelper.typeOfFirst(recordedEvents)));
     }
 }
