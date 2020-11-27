@@ -4,8 +4,6 @@ import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.event.*;
-import domain.shared.value.EmailAddress;
-import domain.shared.value.Hash;
 
 import java.util.List;
 
@@ -19,44 +17,20 @@ public class Customer7 {
         );
     }
 
-    public static List<Event> confirmEmailAddress(List<Event> eventStream, ConfirmCustomerEmailAddress command) {
-        boolean isEmailAddressConfirmed = false;
-        Hash confirmationHash = null;
-        for (Event event : eventStream) {
-            if (event instanceof CustomerRegistered) {
-                confirmationHash = ((CustomerRegistered) event).confirmationHash;
-            } else if (event instanceof CustomerEmailAddressConfirmed) {
-                isEmailAddressConfirmed = true;
-            } else if (event instanceof CustomerEmailAddressChanged) {
-                isEmailAddressConfirmed = false;
-                confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-            }
-        }
-
-        assert confirmationHash != null;
-        if (!confirmationHash.equals(command.confirmationHash)) {
+    public static List<Event> confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) {
+        if (!current.confirmationHash.equals(command.confirmationHash)) {
             return List.of(CustomerEmailAddressConfirmationFailed.build(command.customerID));
         }
 
-        if (isEmailAddressConfirmed) {
+        if (current.isEmailAddressConfirmed) {
             return List.of();
         }
 
         return List.of(CustomerEmailAddressConfirmed.build(command.customerID));
     }
 
-    public static List<Event> changeEmailAddress(List<Event> eventStream, ChangeCustomerEmailAddress command) {
-        EmailAddress emailAddress = null;
-        for (Event event : eventStream) {
-            if (event instanceof CustomerRegistered) {
-                emailAddress = ((CustomerRegistered) event).emailAddress;
-            } else if (event instanceof CustomerEmailAddressChanged) {
-                emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-            }
-        }
-
-        assert emailAddress != null;
-        if (emailAddress.equals(command.emailAddress)) {
+    public static List<Event> changeEmailAddress(CustomerState current, ChangeCustomerEmailAddress command) {
+        if (current.emailAddress.equals(command.emailAddress)) {
             return List.of();
         }
 

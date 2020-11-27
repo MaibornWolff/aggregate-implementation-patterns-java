@@ -1,4 +1,4 @@
-package domain.functional.traditional.customer;
+package domain.oop.traditional.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ConfirmCustomerEmailAddress;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Customer4Test {
+class Customer1Test {
     private ID customerID;
     private Hash confirmationHash;
     private PersonName name;
@@ -22,7 +22,7 @@ class Customer4Test {
     private Hash wrongConfirmationHash;
     private Hash changedConfirmationHash;
     private PersonName changedName;
-    private CustomerState registeredCustomer;
+    private Customer1 registeredCustomer;
 
     @BeforeEach
     void beforeEach() {
@@ -37,17 +37,17 @@ class Customer4Test {
     @Test
     @Order(1)
     void registerCustomer() {
-        // When
+        // When registerCustomer
         var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        var customer = Customer4.register(command);
+        var customer = Customer1.register(command);
 
         // Then it should succeed
-        // and it should expose the expected state
+        // and should have the expected state
         assertNotNull(customer);
-        assertEquals(command.customerID, customer.id);
-        assertEquals(command.name, customer.name);
-        assertEquals(command.emailAddress, customer.emailAddress);
-        assertEquals(command.confirmationHash, customer.confirmationHash);
+        assertEquals(customer.id, command.customerID);
+        assertEquals(customer.name, command.name);
+        assertEquals(customer.emailAddress, command.emailAddress);
+        assertEquals(customer.confirmationHash, command.confirmationHash);
         assertFalse(customer.isEmailAddressConfirmed);
     }
 
@@ -60,10 +60,10 @@ class Customer4Test {
         // When confirmCustomerEmailAddress
         // Then it should succeed
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        assertDoesNotThrow(() -> registeredCustomer.confirmEmailAddress(command));
 
-        // and the emailAddress of the changed Customer should be confirmed
-        assertTrue(changedCustomer.isEmailAddressConfirmed);
+        // and the emailAddress should be confirmed
+        assertTrue(registeredCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -75,7 +75,10 @@ class Customer4Test {
         // When confirmCustomerEmailAddress
         // Then it should throw WrongConfirmationHashException
         var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
-        assertThrows(WrongConfirmationHashException.class, () -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
+
+        // and the emailAddress should not be confirmed
+        assertFalse(registeredCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -86,12 +89,12 @@ class Customer4Test {
 
         // When changeCustomerEmailAddress
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        var changedCustomer = Customer4.changeEmailAddress(registeredCustomer, command);
+        registeredCustomer.changeEmailAddress(command);
 
         // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
-        assertEquals(command.emailAddress, changedCustomer.emailAddress);
-        assertEquals(command.confirmationHash, changedCustomer.confirmationHash);
-        assertFalse(changedCustomer.isEmailAddressConfirmed);
+        assertEquals(registeredCustomer.emailAddress, command.emailAddress);
+        assertEquals(registeredCustomer.confirmationHash, command.confirmationHash);
+        assertFalse(registeredCustomer.isEmailAddressConfirmed);
     }
 
     @Test
@@ -102,13 +105,13 @@ class Customer4Test {
         givenEmailAddressWasConfirmed();
         givenEmailAddressWasChanged();
 
-        // When confirmEmailAddress
-        // Then it should throw WrongConfirmationHashException
+        // When confirmCustomerEmailAddress
+        // Then it should succeed
         var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        var changedCustomer = assertDoesNotThrow(() -> Customer4.confirmEmailAddress(registeredCustomer, command));
+        assertDoesNotThrow(() -> registeredCustomer.confirmEmailAddress(command));
 
-        // and the emailAddress of the changed Customer should be confirmed
-        assertTrue(changedCustomer.isEmailAddressConfirmed);
+        // and the emailAddress should be confirmed
+        assertTrue(registeredCustomer.isEmailAddressConfirmed);
     }
 
     /**
@@ -118,14 +121,14 @@ class Customer4Test {
         var register = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         customerID = register.customerID;
         confirmationHash = register.confirmationHash;
-        registeredCustomer = Customer4.register(register);
+        registeredCustomer = Customer1.register(register);
     }
 
     private void givenEmailAddressWasConfirmed() {
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
 
         try {
-            registeredCustomer = Customer4.confirmEmailAddress(registeredCustomer, command);
+            registeredCustomer.confirmEmailAddress(command);
         } catch (WrongConfirmationHashException e) {
             fail("unexpected error in givenEmailAddressWasConfirmed: " + e.getMessage());
         }
@@ -134,6 +137,6 @@ class Customer4Test {
     private void givenEmailAddressWasChanged() {
         var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
-        registeredCustomer = Customer4.changeEmailAddress(registeredCustomer, command);
+        registeredCustomer.changeEmailAddress(command);
     }
 }

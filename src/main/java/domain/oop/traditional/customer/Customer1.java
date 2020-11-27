@@ -9,22 +9,22 @@ import domain.shared.value.Hash;
 import domain.shared.value.ID;
 import domain.shared.value.PersonName;
 
-public class Customer3 {
+public class Customer1 {
     final ID id;
     EmailAddress emailAddress;
     Hash confirmationHash;
     boolean isEmailAddressConfirmed;
     PersonName name;
 
-    private Customer3(ID id, EmailAddress emailAddress, Hash confirmationHash, PersonName name) {
+    private Customer1(ID id, EmailAddress emailAddress, Hash confirmationHash, PersonName name) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.confirmationHash = confirmationHash;
         this.name = name;
     }
 
-    public static Customer3 register(RegisterCustomer command) {
-        return new Customer3(command.customerID, command.emailAddress, command.confirmationHash, command.name);
+    public static Customer1 register(RegisterCustomer command) {
+        return new Customer1(command.customerID, command.emailAddress, command.confirmationHash, command.name);
     }
 
     public void confirmEmailAddress(ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {

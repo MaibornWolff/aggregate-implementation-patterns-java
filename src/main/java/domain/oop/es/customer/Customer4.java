@@ -8,58 +8,69 @@ import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.PersonName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public final class Customer2 {
+public final class Customer4 {
     private EmailAddress emailAddress;
     private Hash confirmationHash;
     private boolean isEmailAddressConfirmed;
     private PersonName name;
 
-    private Customer2() {
+    private final List<Event> recordedEvents;
+
+    private Customer4() {
+        recordedEvents = new ArrayList<>();
     }
 
-    public static CustomerRegistered register(RegisterCustomer command) {
-        return CustomerRegistered.build(
-                command.customerID,
-                command.emailAddress,
-                command.confirmationHash,
-                command.name
+    public static Customer4 register(RegisterCustomer command) {
+        Customer4 customer = new Customer4();
+
+        customer.recordThat(
+                CustomerRegistered.build(command.customerID, command.emailAddress, command.confirmationHash, command.name)
         );
+
+        return customer;
     }
 
-    public static Customer2 reconstitute(List<Event> events) {
-        Customer2 customer = new Customer2();
+    public static Customer4 reconstitute(List<Event> events) {
+        var customer = new Customer4();
 
         customer.apply(events);
 
         return customer;
     }
 
-    public List<Event> confirmEmailAddress(ConfirmCustomerEmailAddress command) {
+    public void confirmEmailAddress(ConfirmCustomerEmailAddress command) {
         if (!confirmationHash.equals(command.confirmationHash)) {
-            return List.of(
+            recordThat(
                     CustomerEmailAddressConfirmationFailed.build(command.customerID)
             );
+
+            return;
         }
 
-        if (isEmailAddressConfirmed) {
-            return List.of();
+        if (!isEmailAddressConfirmed) {
+            recordThat(
+                    CustomerEmailAddressConfirmed.build(command.customerID)
+            );
         }
-
-        return List.of(
-                CustomerEmailAddressConfirmed.build(command.customerID)
-        );
     }
 
-    public List<Event> changeEmailAddress(ChangeCustomerEmailAddress command) {
-        if (emailAddress.equals(command.emailAddress)) {
-            return List.of();
+    public void changeEmailAddress(ChangeCustomerEmailAddress command) {
+        if (!emailAddress.equals(command.emailAddress)) {
+            recordThat(
+                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
+            );
         }
+    }
 
-        return List.of(
-                CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
-        );
+    public List<Event> getRecordedEvents() {
+        return recordedEvents;
+    }
+
+    private void recordThat(Event event) {
+        recordedEvents.add(event);
     }
 
     void apply(List<Event> events) {

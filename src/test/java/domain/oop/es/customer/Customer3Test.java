@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Customer2Test {
+class Customer3Test {
     private ID customerID;
     private EmailAddress emailAddress;
     private EmailAddress changedEmailAddress;
@@ -26,7 +26,7 @@ class Customer2Test {
     private PersonName name;
     private CustomerRegistered customerRegistered;
     private List<Event> recordedEvents;
-    private Customer2 registeredCustomer;
+    private Customer3 registeredCustomer;
 
     @BeforeEach
     void beforeEach() {
@@ -120,7 +120,7 @@ class Customer2Test {
      */
 
     private void GIVEN_CustomerRegistered() {
-        registeredCustomer = Customer2.reconstitute(
+        registeredCustomer = Customer3.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
@@ -145,7 +145,7 @@ class Customer2Test {
 
     private void WHEN_RegisterCustomer() {
         var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        customerRegistered = Customer2.register(registerCustomer);
+        customerRegistered = Customer3.register(registerCustomer);
         customerID = registerCustomer.customerID;
         confirmationHash = registerCustomer.confirmationHash;
     }
