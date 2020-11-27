@@ -24,7 +24,7 @@ public class THelper {
     public static String eventIsNull(String method) {
         return String.format(
                 "PROBLEM in %s(): The recorded event is NULL!\n" +
-                        "HINT: There must be some weird code ;-)\n",
+                        "HINT: There must be some weird code ;-)\n\n",
                 method
         );
     }
@@ -32,7 +32,7 @@ public class THelper {
     public static String propertyIsWrong(String method, String property) {
         return String.format(
                 "PROBLEM in %s(): The event contains a wrong %s!\n" +
-                        "HINT: The %s in the event should be taken from the command!\n",
+                        "HINT: The %s in the event should be taken from the command!\n\n",
                 method, property, property
         );
     }
@@ -42,7 +42,7 @@ public class THelper {
                 "PROBLEM in %s(): No event was recorded!\n" +
                         "HINTS: Build a %s event and use recordThat() to record it!\n" +
                         "       Did you apply all previous events properly?\n" +
-                        "       Check your business logic :-)!\n",
+                        "       Check your business logic :-)!\n\n",
                 method, expectedEvent
         );
     }
@@ -51,7 +51,7 @@ public class THelper {
         return String.format(
                 "PROBLEM in %s(): An event of the wrong type was recorded!\n" +
                         "HINTS: Did you apply all previous events properly?\n" +
-                        "       Check your business logic :-)!\n",
+                        "       Check your business logic :-)!\n\n",
                 method
         );
     }
@@ -61,7 +61,7 @@ public class THelper {
                 "PROBLEM: No event should have been recorded!\n" +
                         "HINTS: Check your business logic - this command should be ignored (idempotency)!\n" +
                         "       Did you apply all previous events properly?\n" +
-                        "       The recorded event is of type: %s\n",
+                        "       The recorded event is of type: %s\n\n",
                 recordedEvent
         );
     }
