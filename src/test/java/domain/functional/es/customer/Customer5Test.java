@@ -11,14 +11,14 @@ import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
 import domain.shared.value.PersonName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Customer5Test {
     private ID customerID;
     private EmailAddress emailAddress;
@@ -42,6 +42,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(1)
     void registerCustomer() {
         // When RegisterCustomer
         var registerCustomer = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
@@ -58,6 +59,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(2)
     void confirmEmailAddress() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
@@ -81,6 +83,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
@@ -104,6 +107,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(4)
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
@@ -123,6 +127,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(5)
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
@@ -148,6 +153,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(6)
     void changeEmailAddress() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
@@ -173,6 +179,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(7)
     void changeEmailAddress_withUnchangedEmailAddress() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
@@ -190,6 +197,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(8)
     void changeEmailAddress_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressChanged
@@ -209,6 +217,7 @@ class Customer5Test {
     }
 
     @Test
+    @Order(9)
     void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed

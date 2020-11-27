@@ -8,11 +8,11 @@ import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
 import domain.shared.value.PersonName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Customer3Test {
     private ID customerID;
     private Hash confirmationHash;
@@ -35,6 +35,7 @@ class Customer3Test {
     }
 
     @Test
+    @Order(1)
     void registerCustomer() {
         // When registerCustomer
         var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
@@ -51,6 +52,7 @@ class Customer3Test {
     }
 
     @Test
+    @Order(2)
     void confirmEmailAddress() {
         // Given
         givenARegisteredCustomer();
@@ -65,6 +67,7 @@ class Customer3Test {
     }
 
     @Test
+    @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
         // Given
         givenARegisteredCustomer();
@@ -79,6 +82,7 @@ class Customer3Test {
     }
 
     @Test
+    @Order(6)
     void changeEmailAddress() {
         // Given
         givenARegisteredCustomer();
@@ -94,6 +98,7 @@ class Customer3Test {
     }
 
     @Test
+    @Order(9)
     void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
         givenARegisteredCustomer();
