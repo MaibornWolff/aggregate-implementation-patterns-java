@@ -117,7 +117,6 @@ class Customer7Test {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasConfirmed();
         __and_EmailAddressWasChanged();
-
         WHEN_ConfirmEmailAddress_With(changedConfirmationHash);
         THEN_EmailAddressConfirmed();
     }
