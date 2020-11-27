@@ -17,8 +17,51 @@ This leads to the following comprehensive representation in four quadrants.
 | **FP**  | *FP & ES*  | *FP & TRAD*  |
 
 ## Our Aggregate Example
-**To Do**  
-Currently only shown on the Miro board we use for the introduction.
+In this workshop, we want to focus on a Customer aggregate supporting three simple use cases. The details that you can
+find below could have been collected in an event storming workshop beforehand, for example.
+
+### Customer Registration
+Command: **RegisterCustomer** with properties
+* customerID
+* emailAddress
+* confirmationHash
+* personName
+
+Event: **CustomerRegistered** with properties
+* customerID
+* emailAddress
+* confirmationHash
+* personName
+
+Rules & Policies:
+* new email addresses are unconfirmed
+* new email addresses must get a new hash
+
+### Email Confirmation
+Command: **ConfirmCustomerEmailAddress** with properties
+* customerID
+* confirmationHash
+
+Event: **CustomerEmailAddressConfirmed** or **CustomerEmailAddressConfirmationFailed**, both with property
+* customerID
+
+Rules & Policies:
+* email addresses can only be confirmed with matching hash
+
+### Email Change 
+Command: **ChangeCustomerEmailAddress** with properties
+* customerID
+* emailAddress
+* confirmationHash
+
+Event: **CustomerEmailAddressChanged** with properties
+* customerID
+* emailAddress
+* confirmationHash
+
+Rules & Policies:
+* new email addresses are unconfirmed
+* new email addresses must get a new hash
 
 ## General Instructions
 For each model, you can find a class *CustomerX* containing production code as well as a corresponding test class *CustomerXTest*.  
