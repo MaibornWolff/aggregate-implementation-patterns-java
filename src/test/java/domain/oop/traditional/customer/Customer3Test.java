@@ -1,7 +1,6 @@
 package domain.oop.traditional.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.exception.WrongConfirmationHashException;
@@ -108,19 +107,6 @@ class Customer3Test {
 
         // and the emailAddress should be confirmed
         assertTrue(registeredCustomer.isEmailAddressConfirmed);
-    }
-
-    @Test
-    void changeName() {
-        // Given
-        givenARegisteredCustomer();
-
-        // When changeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        registeredCustomer.changeName(command);
-
-        // Then it should have the expected state
-        assertEquals(registeredCustomer.name, command.name);
     }
 
     /**

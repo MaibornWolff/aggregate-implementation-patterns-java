@@ -1,7 +1,6 @@
 package domain.oop.traditional.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.exception.WrongConfirmationHashException;
@@ -40,9 +39,5 @@ public class Customer3 {
         emailAddress = command.emailAddress;
         confirmationHash = command.confirmationHash;
         isEmailAddressConfirmed = false;
-    }
-
-    public void changeName(ChangeCustomerName command) {
-        name = command.name;
     }
 }

@@ -1,7 +1,6 @@
 package domain.functional.traditional.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.exception.WrongConfirmationHashException;
@@ -105,19 +104,6 @@ class Customer4Test {
 
         // and the emailAddress of the changed Customer should be confirmed
         assertTrue(changedCustomer.isEmailAddressConfirmed);
-    }
-
-    @Test
-    void changeName() {
-        // Given
-        givenARegisteredCustomer();
-
-        // When changeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var changedCustomer = Customer4.changeName(registeredCustomer, command);
-
-        // Then it should expose the expected state
-        assertEquals(changedCustomer.name, command.name);
     }
 
     /**

@@ -1,7 +1,6 @@
 package domain.functional.traditional.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
 import domain.shared.exception.WrongConfirmationHashException;
@@ -32,16 +31,6 @@ public class Customer4 {
                 command.confirmationHash,
                 current.name,
                 false
-        );
-    }
-
-    public static CustomerState changeName(CustomerState current, ChangeCustomerName command) {
-        return new CustomerState(
-                current.id,
-                current.emailAddress,
-                current.confirmationHash,
-                command.name,
-                current.isEmailAddressConfirmed
         );
     }
 }
