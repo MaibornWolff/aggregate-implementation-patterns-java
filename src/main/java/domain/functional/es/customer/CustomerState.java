@@ -42,11 +42,6 @@ public class CustomerState {
                 emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
                 confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
                 isEmailAddressConfirmed = false;
-                continue;
-            }
-
-            if (event.getClass() == CustomerNameChanged.class) {
-                name = ((CustomerNameChanged) event).name;
             }
         }
     }
