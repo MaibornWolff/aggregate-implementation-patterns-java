@@ -48,7 +48,7 @@ public final class Customer2 {
         }
 
         return List.of(
-                CustomerEmailAddressConfirmationFailed.build(command.customerID)
+                CustomerEmailAddressConfirmed.build(command.customerID)
         );
     }
 
