@@ -27,7 +27,6 @@ class Customer7Test {
     private Hash wrongConfirmationHash;
     private Hash changedConfirmationHash;
     private PersonName name;
-    private PersonName changedName;
 
     @BeforeEach
     void beforeEach() {
@@ -38,7 +37,6 @@ class Customer7Test {
         wrongConfirmationHash = Hash.generate();
         changedConfirmationHash = Hash.generate();
         name = PersonName.build("John", "Doe");
-        changedName = PersonName.build("Jayne", "Doe");
     }
 
     @Test

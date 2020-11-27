@@ -21,7 +21,6 @@ class Customer1Test {
     private EmailAddress changedEmailAddress;
     private Hash wrongConfirmationHash;
     private Hash changedConfirmationHash;
-    private PersonName changedName;
     private Customer1 registeredCustomer;
 
     @BeforeEach
@@ -31,7 +30,6 @@ class Customer1Test {
         wrongConfirmationHash = Hash.generate();
         changedConfirmationHash = Hash.generate();
         name = PersonName.build("John", "Doe");
-        changedName = PersonName.build("Jayne", "Doe");
     }
 
     @Test
