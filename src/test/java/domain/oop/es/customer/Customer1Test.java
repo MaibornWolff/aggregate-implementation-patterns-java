@@ -51,24 +51,24 @@ class Customer1Test {
     @Order(2)
     void confirmEmailAddress() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmCustomerEmailAddress_With(confirmationHash);
-        THEN_CustomerEmailAddressConfirmed();
+        WHEN_ConfirmEmailAddress_With(confirmationHash);
+        THEN_EmailAddressConfirmed();
     }
 
     @Test
     @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
         GIVEN_CustomerRegistered();
-        WHEN_ConfirmCustomerEmailAddress_With(wrongConfirmationHash);
-        THEN_CustomerEmailAddressConfirmationFailed();
+        WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
+        THEN_EmailAddressConfirmationFailed();
     }
 
     @Test
     @Order(4)
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
         GIVEN_CustomerRegistered();
-        __and_CustomerEmailAddressWasConfirmed();
-        WHEN_ConfirmCustomerEmailAddress_With(confirmationHash);
+        __and_EmailAddressWasConfirmed();
+        WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_NoEvent();
     }
 
@@ -76,45 +76,45 @@ class Customer1Test {
     @Order(5)
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
         GIVEN_CustomerRegistered();
-        __and_CustomerEmailAddressWasConfirmed();
-        WHEN_ConfirmCustomerEmailAddress_With(wrongConfirmationHash);
-        THEN_CustomerEmailAddressConfirmationFailed();
+        __and_EmailAddressWasConfirmed();
+        WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
+        THEN_EmailAddressConfirmationFailed();
     }
 
     @Test
     @Order(6)
-    void changeCustomerEmailAddress() {
+    void changeEmailAddress() {
         // Given
         GIVEN_CustomerRegistered();
-        WHEN_ChangeCustomerEmailAddress_With(changedEmailAddress);
-        THEN_CustomerEmailAddressChanged();
+        WHEN_ChangeEmailAddress_With(changedEmailAddress);
+        THEN_EmailAddressChanged();
     }
 
     @Test
     @Order(7)
-    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+    void changeEmailAddress_withUnchangedEmailAddress() {
         GIVEN_CustomerRegistered();
-        WHEN_ChangeCustomerEmailAddress_With(emailAddress);
+        WHEN_ChangeEmailAddress_With(emailAddress);
         THEN_NoEvent();
     }
 
     @Test
     @Order(8)
-    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+    void changeEmailAddress_whenItWasAlreadyChanged() {
         GIVEN_CustomerRegistered();
-        __and_CustomerEmailAddressWasChanged();
-        WHEN_ChangeCustomerEmailAddress_With(changedEmailAddress);
+        __and_EmailAddressWasChanged();
+        WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_NoEvent();
     }
 
     @Test
     @Order(9)
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         GIVEN_CustomerRegistered();
-        __and_CustomerEmailAddressWasConfirmed();
-        __and_CustomerEmailAddressWasChanged();
-        WHEN_ConfirmCustomerEmailAddress_With(changedConfirmationHash);
-        THEN_CustomerEmailAddressConfirmed();
+        __and_EmailAddressWasConfirmed();
+        __and_EmailAddressWasChanged();
+        WHEN_ConfirmEmailAddress_With(changedConfirmationHash);
+        THEN_EmailAddressConfirmed();
     }
 
     /**
@@ -129,13 +129,13 @@ class Customer1Test {
         );
     }
 
-    private void __and_CustomerEmailAddressWasConfirmed() {
+    private void __and_EmailAddressWasConfirmed() {
         registeredCustomer.apply(
                 CustomerEmailAddressConfirmed.build(customerID)
         );
     }
 
-    private void __and_CustomerEmailAddressWasChanged() {
+    private void __and_EmailAddressWasChanged() {
         registeredCustomer.apply(
                 CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
         );
@@ -152,7 +152,7 @@ class Customer1Test {
         confirmationHash = registerCustomer.confirmationHash;
     }
 
-    private void WHEN_ConfirmCustomerEmailAddress_With(Hash confirmationHash) {
+    private void WHEN_ConfirmEmailAddress_With(Hash confirmationHash) {
         var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
         try {
             registeredCustomer.confirmEmailAddress(command);
@@ -161,7 +161,7 @@ class Customer1Test {
         }
     }
 
-    private void WHEN_ChangeCustomerEmailAddress_With(EmailAddress emailAddress) {
+    private void WHEN_ChangeEmailAddress_With(EmailAddress emailAddress) {
         var command = ChangeCustomerEmailAddress.build(customerID.value, emailAddress.value);
         try {
             registeredCustomer.changeEmailAddress(command);
@@ -187,7 +187,7 @@ class Customer1Test {
         assertEquals(name, ((CustomerRegistered) event).name, THelper.propertyIsWrong(method, "name"));
     }
 
-    void THEN_CustomerEmailAddressConfirmed() {
+    void THEN_EmailAddressConfirmed() {
         var method = "confirmEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
         assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmed"));
@@ -197,7 +197,7 @@ class Customer1Test {
         assertEquals(customerID, ((CustomerEmailAddressConfirmed) event).customerID, THelper.propertyIsWrong(method, "customerID"));
     }
 
-    void THEN_CustomerEmailAddressConfirmationFailed() {
+    void THEN_EmailAddressConfirmationFailed() {
         var method = "confirmEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
         assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmationFailed"));
@@ -207,7 +207,7 @@ class Customer1Test {
         assertEquals(customerID, ((CustomerEmailAddressConfirmationFailed) event).customerID, THelper.propertyIsWrong(method, "customerID"));
     }
 
-    private void THEN_CustomerEmailAddressChanged() {
+    private void THEN_EmailAddressChanged() {
         var method = "changeEmailAddress";
         var recordedEvents = registeredCustomer.getRecordedEvents();
         assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressChanged"));

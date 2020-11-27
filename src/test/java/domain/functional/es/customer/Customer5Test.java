@@ -148,7 +148,7 @@ class Customer5Test {
     }
 
     @Test
-    void changeCustomerEmailAddress() {
+    void changeEmailAddress() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
                 List.of(
@@ -173,7 +173,7 @@ class Customer5Test {
     }
 
     @Test
-    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+    void changeEmailAddress_withUnchangedEmailAddress() {
         // Given CustomerRegistered
         var currentState = CustomerState.reconstitute(
                 List.of(
@@ -190,7 +190,7 @@ class Customer5Test {
     }
 
     @Test
-    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+    void changeEmailAddress_whenItWasAlreadyChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressChanged
         var currentState = CustomerState.reconstitute(
@@ -209,7 +209,7 @@ class Customer5Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given CustomerRegistered
         //   and CustomerEmailAddressConfirmed
         //   and CustomerEmailAddressChanged

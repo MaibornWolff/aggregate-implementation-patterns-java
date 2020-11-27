@@ -86,7 +86,7 @@ class Customer7Test {
 
     @Test
     @Order(6)
-    void changeCustomerEmailAddress() {
+    void changeEmailAddress() {
         GIVEN_CustomerRegistered();
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_EmailAddressChanged();
@@ -94,7 +94,7 @@ class Customer7Test {
 
     @Test
     @Order(7)
-    void changeCustomerEmailAddress_withUnchangedEmailAddress() {
+    void changeEmailAddress_withUnchangedEmailAddress() {
         // Given
         GIVEN_CustomerRegistered();
         WHEN_ChangeEmailAddress_With(emailAddress);
@@ -103,7 +103,7 @@ class Customer7Test {
 
     @Test
     @Order(8)
-    void changeCustomerEmailAddress_whenItWasAlreadyChanged() {
+    void changeEmailAddress_whenItWasAlreadyChanged() {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasChanged();
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
@@ -112,7 +112,7 @@ class Customer7Test {
 
     @Test
     @Order(9)
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasConfirmed();

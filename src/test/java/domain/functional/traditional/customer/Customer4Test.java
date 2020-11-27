@@ -52,7 +52,7 @@ class Customer4Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress() {
+    void confirmEmailAddress() {
         // Given
         givenARegisteredCustomer();
 
@@ -66,7 +66,7 @@ class Customer4Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress_withWrongConfirmationHash() {
+    void confirmEmailAddress_withWrongConfirmationHash() {
         // Given
         givenARegisteredCustomer();
 
@@ -77,7 +77,7 @@ class Customer4Test {
     }
 
     @Test
-    void changeCustomerEmailAddress() {
+    void changeEmailAddress() {
         // Given
         givenARegisteredCustomer();
 
@@ -92,7 +92,7 @@ class Customer4Test {
     }
 
     @Test
-    void confirmCustomerEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
+    void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
         // Given
         givenARegisteredCustomer();
         givenEmailAddressWasConfirmed();
@@ -108,7 +108,7 @@ class Customer4Test {
     }
 
     @Test
-    void changeCustomerName() {
+    void changeName() {
         // Given
         givenARegisteredCustomer();
 
