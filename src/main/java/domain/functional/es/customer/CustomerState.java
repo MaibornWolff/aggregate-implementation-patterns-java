@@ -23,7 +23,7 @@ public class CustomerState {
         return customer;
     }
 
-    private void apply(List<Event> events) {
+    void apply(List<Event> events) {
         for (Event event : events) {
             if (event.getClass() == CustomerRegistered.class) {
                 emailAddress = ((CustomerRegistered) event).emailAddress;
