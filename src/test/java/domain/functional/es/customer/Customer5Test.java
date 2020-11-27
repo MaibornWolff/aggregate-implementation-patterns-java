@@ -1,10 +1,12 @@
 package domain.functional.es.customer;
 
 import domain.shared.command.ChangeCustomerEmailAddress;
-import domain.shared.command.ChangeCustomerName;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
-import domain.shared.event.*;
+import domain.shared.event.CustomerEmailAddressChanged;
+import domain.shared.event.CustomerEmailAddressConfirmationFailed;
+import domain.shared.event.CustomerEmailAddressConfirmed;
+import domain.shared.event.CustomerRegistered;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
@@ -14,7 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class Customer5Test {
     private ID customerID;
@@ -57,7 +60,7 @@ class Customer5Test {
     @Test
     void confirmEmailAddress() {
         // Given CustomerRegistered
-        var currentState= CustomerState.reconstitute(
+        var currentState = CustomerState.reconstitute(
                 List.of(
                         CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
                 )
@@ -230,65 +233,5 @@ class Customer5Test {
         //  and the payload should be as expected
         var event = (CustomerEmailAddressConfirmed) recordedEvents.get(0);
         assertEquals(command.customerID, event.customerID);
-    }
-
-    @Test
-    void changeCustomerName() {
-        // Given CustomerRegistered
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-                )
-        );
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer5.changeName(currentState, command);
-
-        // Then CustomerNameChanged
-        assertEquals(1, recordedEvents.size());
-        assertEquals(CustomerNameChanged.class, recordedEvents.get(0).getClass());
-        assertNotNull(recordedEvents.get(0));
-
-        //  and the payload should be as expected
-        var event = (CustomerNameChanged) recordedEvents.get(0);
-        assertEquals(command.customerID, event.customerID);
-        assertEquals(command.name, event.name);
-    }
-
-    @Test
-    void changeCustomerName_withUnchangedName() {
-        // Given CustomerRegistered
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-                )
-        );
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, name.givenName, name.familyName);
-        var recordedEvents = Customer5.changeName(currentState, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
-    }
-
-    @Test
-    void changeCustomerName_whenItWasAlreadyChanged() {
-        // Given CustomerRegistered
-        //   and CustomerNameChanged
-        var currentState = CustomerState.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name),
-                        CustomerNameChanged.build(customerID, changedName)
-                )
-        );
-
-        // When ChangeCustomerName
-        var command = ChangeCustomerName.build(customerID.value, changedName.givenName, changedName.familyName);
-        var recordedEvents = Customer5.changeName(currentState, command);
-
-        // Then no event
-        assertEquals(0, recordedEvents.size());
     }
 }
