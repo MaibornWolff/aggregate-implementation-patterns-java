@@ -10,7 +10,7 @@ public class THelper {
             return "???";
         }
 
-        return recordedEvents.get(0).getClass().toString();
+        return recordedEvents.get(0).getClass().getSimpleName();
     }
 
     public static String propertyIsNull(String property) {
@@ -56,13 +56,13 @@ public class THelper {
         );
     }
 
-    public static String noEventShouldHaveBeenRecorded(String recordedEvent) {
+    public static String noEventShouldHaveBeenRecorded(String recordedEventType) {
         return String.format(
                 "PROBLEM: No event should have been recorded!\n" +
                         "HINTS: Check your business logic - this command should be ignored (idempotency)!\n" +
                         "       Did you apply all previous events properly?\n" +
-                        "       The recorded event is of type: %s\n\n",
-                recordedEvent
+                        "       The recorded event is of type %s.\n\n",
+                recordedEventType
         );
     }
 }
