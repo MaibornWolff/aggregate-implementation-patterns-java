@@ -68,7 +68,7 @@ class Customer3Test {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasConfirmed();
         WHEN_ConfirmEmailAddress_With(confirmationHash);
-        THEN_NoEvent();
+        THEN_NothingShouldHappen();
     }
 
     @Test
@@ -93,7 +93,7 @@ class Customer3Test {
     void changeEmailAddress_withUnchangedEmailAddress() {
         GIVEN_CustomerRegistered();
         WHEN_ChangeEmailAddress_With(emailAddress);
-        THEN_NoEvent();
+        THEN_NothingShouldHappen();
     }
 
     @Test
@@ -102,7 +102,7 @@ class Customer3Test {
         GIVEN_CustomerRegistered();
         __and_EmailAddressWasChanged();
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
-        THEN_NoEvent();
+        THEN_NothingShouldHappen();
     }
 
     @Test
@@ -209,7 +209,7 @@ class Customer3Test {
         assertEquals(changedEmailAddress, ((CustomerEmailAddressChanged) event).emailAddress, THelper.propertyIsWrong(method, "emailAddress"));
     }
 
-    private void THEN_NoEvent() {
+    private void THEN_NothingShouldHappen() {
         assertEquals(0, recordedEvents.size(), THelper.noEventShouldHaveBeenRecorded(THelper.typeOfFirst(recordedEvents)));
     }
 }
