@@ -9,15 +9,14 @@ import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
 import domain.shared.value.PersonName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Customer7Test {
     private ID customerID;
     private EmailAddress emailAddress;
