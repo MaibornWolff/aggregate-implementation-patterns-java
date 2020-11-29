@@ -21,6 +21,8 @@ to solve. Here is how those variants map to our two dimensions:
 In this workshop, we want to focus on a Customer aggregate supporting three simple use cases. The details, which you can
 find below, could have been collected in an *Event Storming* workshop beforehand.
 
+![Use-Cases from Event Storming](images/evenstorming.jpg)
+
 ### Customer Registration
 Command: **RegisterCustomer** with properties
 * customerID (ID)
