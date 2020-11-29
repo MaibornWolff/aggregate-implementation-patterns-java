@@ -19,7 +19,7 @@ to solve. Here is how those variants map to our two dimensions:
 
 ## Our Aggregate Example
 In this workshop, we want to focus on a Customer aggregate supporting three simple use cases. The details, which you can
-find below, could have been collected in an *Event Storming* workshop beforehand.
+find below, could have been collected in an *Event Storming* workshop beforehand:
 
 ![Use-Cases from Event Storming](images/evenstorming.jpg)
 
@@ -75,7 +75,12 @@ Command and a *CustomerNameChanged* Event in the codebase. If we are super fast,
 We have prepared 7 variants of the Customer model for you, and most of them contain **tasks** that you will have to solve.
 
 For each model variant, you can find a class *CustomerX* containing production code as well as a corresponding test
-class *CustomerXTest*. The production code is **missing relevant pieces of code** which you will have to fill to make
+class *CustomerXTest*, which contain the following test scenarios which are written in the Given/When/Then
+(GWT, Gherkin language) format:
+
+![Test Scenarios](images/test_scenarios.jpg)
+
+The production code is **missing relevant pieces of code** which you will have to fill to make
 the tests green. There are **TODO** comments which mark where code is missing. You don't have to modify test cases,
 and you don't have to modify the existing code to complete the tasks.
 
