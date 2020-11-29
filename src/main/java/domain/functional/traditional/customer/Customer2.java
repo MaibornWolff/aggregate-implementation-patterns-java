@@ -7,7 +7,12 @@ import domain.shared.exception.WrongConfirmationHashException;
 
 public class Customer2 {
     public static CustomerState register(RegisterCustomer command) {
-        return new CustomerState(command.customerID, command.emailAddress, command.confirmationHash, command.name);
+        return new CustomerState(
+                command.customerID,
+                command.emailAddress,
+                command.confirmationHash,
+                command.name
+        );
     }
 
     public static CustomerState confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
