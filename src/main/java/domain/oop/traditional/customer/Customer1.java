@@ -24,7 +24,12 @@ public class Customer1 {
     }
 
     public static Customer1 register(RegisterCustomer command) {
-        return new Customer1(command.customerID, command.emailAddress, command.confirmationHash, command.name);
+        return new Customer1(
+                command.customerID,
+                command.emailAddress,
+                command.confirmationHash,
+                command.name
+        );
     }
 
     public void confirmEmailAddress(ConfirmCustomerEmailAddress command) throws WrongConfirmationHashException {
