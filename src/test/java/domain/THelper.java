@@ -23,7 +23,7 @@ public class THelper {
 
     public static String eventIsNull(String method) {
         return String.format(
-                "PROBLEM in %s(): The recorded event is NULL!\n" +
+                "PROBLEM in %s(): The recorded/returned event is NULL!\n" +
                         "HINT: There must be some weird code ;-)\n\n",
                 method
         );
@@ -39,7 +39,7 @@ public class THelper {
 
     public static String noEventWasRecorded(String method, String expectedEvent) {
         return String.format(
-                "PROBLEM in %s(): No event was recorded!\n" +
+                "PROBLEM in %s(): No event was recorded/returned!\n" +
                         "HINTS: Build a %s event and use recordThat() to record it!\n" +
                         "       Did you apply all previous events properly?\n" +
                         "       Check your business logic :-)!\n\n",
@@ -49,7 +49,7 @@ public class THelper {
 
     public static String eventOfWrongTypeWasRecorded(String method) {
         return String.format(
-                "PROBLEM in %s(): An event of the wrong type was recorded!\n" +
+                "PROBLEM in %s(): An event of the wrong type was recorded/returned!\n" +
                         "HINTS: Did you apply all previous events properly?\n" +
                         "       Check your business logic :-)!\n\n",
                 method
@@ -58,10 +58,10 @@ public class THelper {
 
     public static String noEventShouldHaveBeenRecorded(String recordedEventType) {
         return String.format(
-                "PROBLEM: No event should have been recorded!\n" +
+                "PROBLEM: No event should have been recorded/returned!\n" +
                         "HINTS: Check your business logic - this command should be ignored (idempotency)!\n" +
                         "       Did you apply all previous events properly?\n" +
-                        "       The recorded event is of type %s.\n\n",
+                        "       The recorded/returned event is of type %s.\n\n",
                 recordedEventType
         );
     }
