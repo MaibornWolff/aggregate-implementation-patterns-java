@@ -26,9 +26,7 @@ public final class Customer4 {
     public static Customer4 register(RegisterCustomer command) {
         Customer4 customer = new Customer4();
 
-        customer.recordThat(
-                CustomerRegistered.build(command.customerID, command.emailAddress, command.confirmationHash, command.name)
-        );
+        // TODO
 
         return customer;
     }
@@ -42,27 +40,11 @@ public final class Customer4 {
     }
 
     public void confirmEmailAddress(ConfirmCustomerEmailAddress command) {
-        if (!confirmationHash.equals(command.confirmationHash)) {
-            recordThat(
-                    CustomerEmailAddressConfirmationFailed.build(command.customerID)
-            );
-
-            return;
-        }
-
-        if (!isEmailAddressConfirmed) {
-            recordThat(
-                    CustomerEmailAddressConfirmed.build(command.customerID)
-            );
-        }
+        // TODO
     }
 
     public void changeEmailAddress(ChangeCustomerEmailAddress command) {
-        if (!emailAddress.equals(command.emailAddress)) {
-            recordThat(
-                    CustomerEmailAddressChanged.build(command.customerID, command.emailAddress, command.confirmationHash)
-            );
-        }
+        // TODO
     }
 
     public List<Event> getRecordedEvents() {
@@ -81,15 +63,11 @@ public final class Customer4 {
 
     void apply(Event event) {
         if (event.getClass() == CustomerRegistered.class) {
-            emailAddress = ((CustomerRegistered) event).emailAddress;
-            confirmationHash = ((CustomerRegistered) event).confirmationHash;
-            name = ((CustomerRegistered) event).name;
+            // TODO
         } else if (event.getClass() == CustomerEmailAddressConfirmed.class) {
-            isEmailAddressConfirmed = true;
+            // TODO
         } else if (event.getClass() == CustomerEmailAddressChanged.class) {
-            emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-            confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
-            isEmailAddressConfirmed = false;
+            // TODO
         }
     }
 }
