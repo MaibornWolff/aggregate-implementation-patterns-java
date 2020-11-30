@@ -26,21 +26,17 @@ public class CustomerState {
     void apply(List<Event> events) {
         for (Event event : events) {
             if (event.getClass() == CustomerRegistered.class) {
-                emailAddress = ((CustomerRegistered) event).emailAddress;
-                confirmationHash = ((CustomerRegistered) event).confirmationHash;
-                name = ((CustomerRegistered) event).name;
-                isEmailAddressConfirmed = false;
+                // TODO
                 continue;
             }
 
             if (event.getClass() == CustomerEmailAddressConfirmed.class) {
-                isEmailAddressConfirmed = true;
+                // TODO
                 continue;
             }
 
             if (event.getClass() == CustomerEmailAddressChanged.class) {
-                emailAddress = ((CustomerEmailAddressChanged) event).emailAddress;
-                confirmationHash = ((CustomerEmailAddressChanged) event).confirmationHash;
+                // TODO
                 isEmailAddressConfirmed = false;
             }
         }
