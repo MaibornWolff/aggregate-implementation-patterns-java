@@ -41,7 +41,7 @@ public class THelper {
     public static String noEventWasRecorded(String method, String expectedEvent) {
         return String.format(
                 "PROBLEM in %s(): No event was recorded/returned!\n" +
-                        "HINTS: Build a %s event and use recordThat() to record it!\n" +
+                        "HINTS: Build a %s event and record/return it!\n" +
                         "       Did you apply all previous events properly?\n" +
                         "       Check your business logic :-)!\n\n",
                 method, expectedEvent
