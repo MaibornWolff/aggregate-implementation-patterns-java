@@ -178,7 +178,8 @@ class Customer7Test {
 
     private void THEN_CustomerRegistered() {
         var method = "register";
-        assertNotNull(customerRegistered, THelper.eventIsNull(method));
+        var eventName = "CustomerRegistered";
+        assertNotNull(customerRegistered, THelper.eventIsNull(method, eventName));
         assertEquals(customerID, customerRegistered.customerID, THelper.propertyIsWrong(method, "customerID"));
         assertEquals(emailAddress, customerRegistered.emailAddress, THelper.propertyIsWrong(method, "emailAddress"));
         assertEquals(confirmationHash, customerRegistered.confirmationHash, THelper.propertyIsWrong(method, "confirmationHash"));
@@ -187,9 +188,10 @@ class Customer7Test {
 
     private void THEN_EmailAddressConfirmed() {
         var method = "confirmEmailAddress";
-        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmed"));
+        var eventName = "CustomerEmailAddressConfirmed";
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, eventName));
         var event = recordedEvents.get(0);
-        assertNotNull(event, THelper.eventIsNull(method));
+        assertNotNull(event, THelper.eventIsNull(method, eventName));
         assertEquals(CustomerEmailAddressConfirmed.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
         var typedEvent = (CustomerEmailAddressConfirmed) event;
         assertEquals(customerID, typedEvent.customerID, THelper.propertyIsWrong(method, "customerID"));
@@ -197,9 +199,10 @@ class Customer7Test {
 
     private void THEN_EmailAddressConfirmationFailed() {
         var method = "confirmEmailAddress";
-        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressConfirmationFailed"));
+        var eventName = "CustomerEmailAddressConfirmationFailed";
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, eventName));
         var event = recordedEvents.get(0);
-        assertNotNull(event, THelper.eventIsNull(method));
+        assertNotNull(event, THelper.eventIsNull(method, eventName));
         assertEquals(CustomerEmailAddressConfirmationFailed.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
         var typedEvent = (CustomerEmailAddressConfirmationFailed) event;
         assertEquals(customerID, typedEvent.customerID, THelper.propertyIsWrong(method, "customerID"));
@@ -207,9 +210,10 @@ class Customer7Test {
 
     private void THEN_EmailAddressChanged() {
         var method = "changeEmailAddress";
-        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, "CustomerEmailAddressChanged"));
+        var eventName = "CustomerEmailAddressChanged";
+        assertEquals(1, recordedEvents.size(), THelper.noEventWasRecorded(method, eventName));
         var event = recordedEvents.get(0);
-        assertNotNull(event, THelper.eventIsNull(method));
+        assertNotNull(event, THelper.eventIsNull(method, eventName));
         assertEquals(CustomerEmailAddressChanged.class, event.getClass(), THelper.eventOfWrongTypeWasRecorded(method));
         var typedEvent = (CustomerEmailAddressChanged) event;
         assertEquals(customerID, typedEvent.customerID, THelper.propertyIsWrong(method, "customerID"));

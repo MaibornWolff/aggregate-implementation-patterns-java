@@ -21,11 +21,12 @@ public class THelper {
         );
     }
 
-    public static String eventIsNull(String method) {
+    public static String eventIsNull(String method, String expectedEvent) {
         return String.format(
                 "PROBLEM in %s(): The recorded/returned event is NULL!\n" +
-                        "HINT: There must be some weird code ;-)\n\n",
-                method
+                        "HINT: Make sure you record/return a %s event\n\n",
+                method,
+                expectedEvent
         );
     }
 
