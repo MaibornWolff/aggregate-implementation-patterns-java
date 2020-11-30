@@ -80,13 +80,11 @@ class *CustomerXTest*, which contain the following test scenarios which are writ
 
 ![Test Scenarios](images/test_scenarios.jpg)
 
+For each *CustomerX*:  
 The production code is **missing relevant pieces of code** which you will have to fill to make
 the tests green. There are **TODO** comments which mark where code is missing. You don't have to modify test cases,
 and you don't have to modify the existing code to complete the tasks.
-
-For each *CustomerX*:  
-Please enable the disabled test cases (remove the @Disabled annotation) in *CustomerXTest* one by one and make them
-all green! The first test case (RegisterCustomer) is already enabled for you to start.
+Please always make the first failing test green!  
 
 ## Setup
 The repository contains a *Gradle* build file to set up the dependencies (Junit 5.7).
