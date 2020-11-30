@@ -13,10 +13,14 @@ public class Customer7 {
     }
 
     public static List<Event> confirmEmailAddress(CustomerState current, ConfirmCustomerEmailAddress command) {
+        // TODO
+
         return List.of(); // TODO
     }
 
     public static List<Event> changeEmailAddress(CustomerState current, ChangeCustomerEmailAddress command) {
+        // TODO
+
         return List.of(); // TODO
     }
 }

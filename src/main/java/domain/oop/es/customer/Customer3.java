@@ -32,10 +32,14 @@ public final class Customer3 {
     }
 
     public List<Event> confirmEmailAddress(ConfirmCustomerEmailAddress command) {
+        // TODO
+
         return List.of(); // TODO
     }
 
     public List<Event> changeEmailAddress(ChangeCustomerEmailAddress command) {
+        // TODO
+
         return List.of(); // TODO
     }
 

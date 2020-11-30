@@ -27,6 +27,8 @@ public class Customer5 {
             }
         }
 
+        // TODO
+
         return List.of(); // TODO
     }
 
@@ -39,6 +41,8 @@ public class Customer5 {
                 // TODO
             }
         }
+
+        // TODO
 
         return List.of(); // TODO
     }
