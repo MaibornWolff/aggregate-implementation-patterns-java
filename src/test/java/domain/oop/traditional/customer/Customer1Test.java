@@ -36,8 +36,8 @@ class Customer1Test {
     @Order(1)
     void registerCustomer() {
         // When registerCustomer
-        var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        var customer = Customer1.register(command);
+        RegisterCustomer command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        Customer1 customer = Customer1.register(command);
 
         // Then it should succeed
         // and should have the expected state
@@ -57,7 +57,7 @@ class Customer1Test {
 
         // When confirmCustomerEmailAddress
         // Then it should succeed
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
         assertDoesNotThrow(() -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should be confirmed
@@ -72,7 +72,7 @@ class Customer1Test {
 
         // When confirmCustomerEmailAddress
         // Then it should throw WrongConfirmationHashException
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should not be confirmed
@@ -86,7 +86,7 @@ class Customer1Test {
         givenARegisteredCustomer();
 
         // When changeCustomerEmailAddress
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         registeredCustomer.changeEmailAddress(command);
 
         // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
@@ -105,7 +105,7 @@ class Customer1Test {
 
         // When confirmCustomerEmailAddress
         // Then it should succeed
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
         assertDoesNotThrow(() -> registeredCustomer.confirmEmailAddress(command));
 
         // and the emailAddress should be confirmed
@@ -116,14 +116,14 @@ class Customer1Test {
      * Helper methods to set up the Given state
      */
     private void givenARegisteredCustomer() {
-        var register = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        RegisterCustomer register = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         customerID = register.customerID;
         confirmationHash = register.confirmationHash;
         registeredCustomer = Customer1.register(register);
     }
 
     private void givenEmailAddressWasConfirmed() {
-        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
 
         try {
             registeredCustomer.confirmEmailAddress(command);
@@ -133,7 +133,7 @@ class Customer1Test {
     }
 
     private void givenEmailAddressWasChanged() {
-        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer.changeEmailAddress(command);
     }

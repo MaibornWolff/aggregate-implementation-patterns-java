@@ -13,7 +13,7 @@ public class Customer6 {
     }
 
     public static List<Event> confirmEmailAddress(List<Event> eventStream, ConfirmCustomerEmailAddress command) {
-        var current = CustomerState.reconstitute(eventStream);
+        CustomerState current = CustomerState.reconstitute(eventStream);
 
         // TODO
 
@@ -21,7 +21,7 @@ public class Customer6 {
     }
 
     public static List<Event> changeEmailAddress(List<Event> eventStream, ChangeCustomerEmailAddress command) {
-        var current = CustomerState.reconstitute(eventStream);
+        CustomerState current = CustomerState.reconstitute(eventStream);
 
         // TODO
 

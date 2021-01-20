@@ -16,7 +16,7 @@ public class CustomerState {
     private CustomerState() {}
 
     public static CustomerState reconstitute(List<Event> events) {
-        var customer = new CustomerState();
+        CustomerState customer = new CustomerState();
 
         customer.apply(events);
 
