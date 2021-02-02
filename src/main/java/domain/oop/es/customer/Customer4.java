@@ -32,7 +32,7 @@ public final class Customer4 {
     }
 
     public static Customer4 reconstitute(List<Event> events) {
-        Customer4 customer = new Customer4();
+        var customer = new Customer4();
 
         customer.apply(events);
 

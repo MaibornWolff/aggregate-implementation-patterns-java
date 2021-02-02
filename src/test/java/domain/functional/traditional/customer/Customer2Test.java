@@ -36,8 +36,8 @@ class Customer2Test {
     @Order(1)
     void registerCustomer() {
         // When
-        RegisterCustomer command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
-        CustomerState customer = Customer2.register(command);
+        var command = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        var customer = Customer2.register(command);
 
         // Then it should succeed
         // and it should expose the expected state
@@ -57,8 +57,8 @@ class Customer2Test {
 
         // When confirmCustomerEmailAddress
         // Then it should succeed
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
-        CustomerState changedCustomer = assertDoesNotThrow(() -> Customer2.confirmEmailAddress(registeredCustomer, command));
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        var changedCustomer = assertDoesNotThrow(() -> Customer2.confirmEmailAddress(registeredCustomer, command));
 
         // and the emailAddress of the changed Customer should be confirmed
         assertTrue(changedCustomer.isEmailAddressConfirmed);
@@ -72,7 +72,7 @@ class Customer2Test {
 
         // When confirmCustomerEmailAddress
         // Then it should throw WrongConfirmationHashException
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, wrongConfirmationHash.value);
         assertThrows(WrongConfirmationHashException.class, () -> Customer2.confirmEmailAddress(registeredCustomer, command));
     }
 
@@ -83,8 +83,8 @@ class Customer2Test {
         givenARegisteredCustomer();
 
         // When changeCustomerEmailAddress
-        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
-        CustomerState changedCustomer = Customer2.changeEmailAddress(registeredCustomer, command);
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var changedCustomer = Customer2.changeEmailAddress(registeredCustomer, command);
 
         // Then the emailAddress and confirmationHash should be changed and the emailAddress should be unconfirmed
         assertEquals(command.emailAddress, changedCustomer.emailAddress);
@@ -102,8 +102,8 @@ class Customer2Test {
 
         // When confirmEmailAddress
         // Then it should throw WrongConfirmationHashException
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
-        CustomerState changedCustomer = assertDoesNotThrow(() -> Customer2.confirmEmailAddress(registeredCustomer, command));
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, changedConfirmationHash.value);
+        var changedCustomer = assertDoesNotThrow(() -> Customer2.confirmEmailAddress(registeredCustomer, command));
 
         // and the emailAddress of the changed Customer should be confirmed
         assertTrue(changedCustomer.isEmailAddressConfirmed);
@@ -113,14 +113,14 @@ class Customer2Test {
      * Helper methods to set up the Given state
      */
     private void givenARegisteredCustomer() {
-        RegisterCustomer register = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
+        var register = RegisterCustomer.build(emailAddress.value, name.givenName, name.familyName);
         customerID = register.customerID;
         confirmationHash = register.confirmationHash;
         registeredCustomer = Customer2.register(register);
     }
 
     private void givenEmailAddressWasConfirmed() {
-        ConfirmCustomerEmailAddress command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
+        var command = ConfirmCustomerEmailAddress.build(customerID.value, confirmationHash.value);
 
         try {
             registeredCustomer = Customer2.confirmEmailAddress(registeredCustomer, command);
@@ -130,7 +130,7 @@ class Customer2Test {
     }
 
     private void givenEmailAddressWasChanged() {
-        ChangeCustomerEmailAddress command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
+        var command = ChangeCustomerEmailAddress.build(customerID.value, changedEmailAddress.value);
         changedConfirmationHash = command.confirmationHash;
         registeredCustomer = Customer2.changeEmailAddress(registeredCustomer, command);
     }
