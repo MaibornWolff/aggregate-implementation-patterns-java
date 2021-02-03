@@ -37,7 +37,6 @@ public class CustomerState {
 
             if (event.getClass() == CustomerEmailAddressChanged.class) {
                 // TODO
-                isEmailAddressConfirmed = false;
             }
         }
     }
