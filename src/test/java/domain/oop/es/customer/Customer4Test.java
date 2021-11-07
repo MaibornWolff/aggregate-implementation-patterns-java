@@ -4,10 +4,7 @@ import domain.THelper;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
-import domain.shared.event.CustomerEmailAddressChanged;
-import domain.shared.event.CustomerEmailAddressConfirmationFailed;
-import domain.shared.event.CustomerEmailAddressConfirmed;
-import domain.shared.event.CustomerRegistered;
+import domain.shared.event.*;
 import domain.shared.value.EmailAddress;
 import domain.shared.value.Hash;
 import domain.shared.value.ID;
@@ -50,7 +47,7 @@ class Customer4Test {
     @Test
     @Order(2)
     void confirmEmailAddress() {
-        GIVEN_CustomerRegistered();
+        GIVEN(CustomerIsRegistered());
         WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_EmailAddressConfirmed();
     }
@@ -58,7 +55,7 @@ class Customer4Test {
     @Test
     @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
-        GIVEN_CustomerRegistered();
+        GIVEN(CustomerIsRegistered());
         WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
@@ -66,8 +63,8 @@ class Customer4Test {
     @Test
     @Order(4)
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
-        GIVEN_CustomerRegistered();
-        __and_EmailAddressWasConfirmed();
+        GIVEN(CustomerIsRegistered(),
+                __and_EmailAddressWasConfirmed());
         WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_NothingShouldHappen();
     }
@@ -75,8 +72,8 @@ class Customer4Test {
     @Test
     @Order(5)
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        GIVEN_CustomerRegistered();
-        __and_EmailAddressWasConfirmed();
+        GIVEN(CustomerIsRegistered(),
+                __and_EmailAddressWasConfirmed());
         WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
@@ -85,7 +82,7 @@ class Customer4Test {
     @Order(6)
     void changeEmailAddress() {
         // Given
-        GIVEN_CustomerRegistered();
+        GIVEN(CustomerIsRegistered());
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_EmailAddressChanged();
     }
@@ -93,7 +90,7 @@ class Customer4Test {
     @Test
     @Order(7)
     void changeEmailAddress_withUnchangedEmailAddress() {
-        GIVEN_CustomerRegistered();
+        GIVEN(CustomerIsRegistered());
         WHEN_ChangeEmailAddress_With(emailAddress);
         THEN_NothingShouldHappen();
     }
@@ -101,8 +98,8 @@ class Customer4Test {
     @Test
     @Order(8)
     void changeEmailAddress_whenItWasAlreadyChanged() {
-        GIVEN_CustomerRegistered();
-        __and_EmailAddressWasChanged();
+        GIVEN(CustomerIsRegistered(),
+                __and_EmailAddressWasChanged());
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_NothingShouldHappen();
     }
@@ -110,9 +107,9 @@ class Customer4Test {
     @Test
     @Order(9)
     void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        GIVEN_CustomerRegistered();
-        __and_EmailAddressWasConfirmed();
-        __and_EmailAddressWasChanged();
+        GIVEN(CustomerIsRegistered(),
+                __and_EmailAddressWasConfirmed(),
+                __and_EmailAddressWasChanged());
         WHEN_ConfirmEmailAddress_With(changedConfirmationHash);
         THEN_EmailAddressConfirmed();
     }
@@ -121,24 +118,20 @@ class Customer4Test {
      * Methods for GIVEN
      */
 
-    private void GIVEN_CustomerRegistered() {
-        registeredCustomer = Customer4.reconstitute(
-                List.of(
-                        CustomerRegistered.build(customerID, emailAddress, confirmationHash, name)
-                )
-        );
+    private void GIVEN(Event... events) {
+        registeredCustomer = Customer4.reconstitute(List.of(events));
     }
 
-    private void __and_EmailAddressWasConfirmed() {
-        registeredCustomer.apply(
-                CustomerEmailAddressConfirmed.build(customerID)
-        );
+    private CustomerRegistered CustomerIsRegistered() {
+        return CustomerRegistered.build(customerID, emailAddress, confirmationHash, name);
     }
 
-    private void __and_EmailAddressWasChanged() {
-        registeredCustomer.apply(
-                CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash)
-        );
+    private CustomerEmailAddressConfirmed __and_EmailAddressWasConfirmed() {
+        return CustomerEmailAddressConfirmed.build(customerID);
+    }
+
+    private CustomerEmailAddressChanged __and_EmailAddressWasChanged() {
+        return CustomerEmailAddressChanged.build(customerID, changedEmailAddress, changedConfirmationHash);
     }
 
     /**
