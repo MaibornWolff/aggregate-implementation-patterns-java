@@ -1,7 +1,6 @@
 package domain.functional.es.customer;
 
 import domain.THelper;
-import domain.oop.es.customer.Customer3;
 import domain.shared.command.ChangeCustomerEmailAddress;
 import domain.shared.command.ConfirmCustomerEmailAddress;
 import domain.shared.command.RegisterCustomer;
