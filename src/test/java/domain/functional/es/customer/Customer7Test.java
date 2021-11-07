@@ -50,7 +50,7 @@ class Customer7Test {
     @Test
     @Order(2)
     void confirmEmailAddress() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_EmailAddressConfirmed();
     }
@@ -58,7 +58,7 @@ class Customer7Test {
     @Test
     @Order(3)
     void confirmEmailAddress_withWrongConfirmationHash() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
@@ -66,7 +66,7 @@ class Customer7Test {
     @Test
     @Order(4)
     void confirmEmailAddress_whenItWasAlreadyConfirmed() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ConfirmEmailAddress_With(confirmationHash);
         THEN_EmailAddressConfirmed();
     }
@@ -74,7 +74,7 @@ class Customer7Test {
     @Test
     @Order(5)
     void confirmEmailAddress_withWrongConfirmationHash_whenItWasAlreadyConfirmed() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ConfirmEmailAddress_With(wrongConfirmationHash);
         THEN_EmailAddressConfirmationFailed();
     }
@@ -82,7 +82,7 @@ class Customer7Test {
     @Test
     @Order(6)
     void changeEmailAddress() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_EmailAddressChanged();
     }
@@ -90,7 +90,7 @@ class Customer7Test {
     @Test
     @Order(7)
     void changeEmailAddress_withUnchangedEmailAddress() {
-        GIVEN(CustomerIsRegistered());
+        GIVEN(customerIsRegistered());
         WHEN_ChangeEmailAddress_With(emailAddress);
         THEN_NothingShouldHappen();
     }
@@ -98,7 +98,7 @@ class Customer7Test {
     @Test
     @Order(8)
     void changeEmailAddress_whenItWasAlreadyChanged() {
-        GIVEN(CustomerIsRegistered(),
+        GIVEN(customerIsRegistered(),
                 __and_EmailAddressWasChanged());
         WHEN_ChangeEmailAddress_With(changedEmailAddress);
         THEN_NothingShouldHappen();
@@ -107,7 +107,7 @@ class Customer7Test {
     @Test
     @Order(9)
     void confirmEmailAddress_whenItWasPreviouslyConfirmedAndThenChanged() {
-        GIVEN(CustomerIsRegistered(),
+        GIVEN(customerIsRegistered(),
                 __and_EmailAddressWasConfirmed(),
                 __and_EmailAddressWasChanged());
         WHEN_ConfirmEmailAddress_With(changedConfirmationHash);
@@ -122,7 +122,7 @@ class Customer7Test {
         currentState = CustomerState.reconstitute(List.of(events));
     }
 
-    private CustomerRegistered CustomerIsRegistered() {
+    private CustomerRegistered customerIsRegistered() {
         return CustomerRegistered.build(customerID, emailAddress, confirmationHash, name);
     }
 
